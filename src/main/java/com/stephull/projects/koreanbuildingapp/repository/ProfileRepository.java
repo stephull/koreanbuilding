@@ -7,12 +7,10 @@ import java.lang.StringBuilder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Repository;
 
 import com.stephull.projects.koreanbuildingapp.model.Profile;
 
-@Repository
-public interface ProfileRepository extends JpaRepository<Profile, Long> {
+public interface ProfileRepository extends JpaRepository<Profile, String> {
 
     @Query(value="", nativeQuery=true)
     List<Profile> findProfilesBySQLQuery(

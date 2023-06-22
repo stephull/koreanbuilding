@@ -12,7 +12,7 @@ import java.util.List;
 import java.lang.StringBuilder;
 
 @Repository
-public interface KBRepository extends JpaRepository<KB, Long> {
+public interface KBRepository extends JpaRepository<KB, String> {
 
     @Query(value="", nativeQuery=true)
     List<KB> findKoreanBuildsBySQLQuery(

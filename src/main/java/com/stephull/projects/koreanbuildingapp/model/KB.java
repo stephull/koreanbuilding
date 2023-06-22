@@ -1,139 +1,45 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "kbb_builds")
-@Data
+import java.util.ArrayList;
+
+@Document(collection="KoreanBuilds")
 public class KB {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
 
-    @Column(name = "character")
     private String character;
-
-    @Column(name = "build")
     private String build;
-
-    @Column(name = "complete")
     private boolean complete;
-
-    @Column(name = "sound_key")
-    private String soundKey;
-
-    @Column(name = "sound_silent")
-    private boolean soundSilent;
-
-    @Column(name = "sound_replace")
-    private boolean soundReplace;
-
-    @Column(name = "sound_pronunciation_type", nullable = true)
-    private String soundPronunciationType;
-
-    @Column(name = "sound_pronunciation_additional_character", nullable = true)
-    private String soundPronunciationAdditionalCharacter;
-
-    @Column(name = "sound_pronunciation_additional_sound", nullable = true)
-    private String soundPronunciationAdditionalSound;
-
-    @Column(name = "sound_pronunciation_replacement_character", nullable = true)
-    private String soundPronunciationReplacementCharacter;
-
-    @Column(name = "sound_pronunciation_replacement_sound", nullable = true)
-    private String soundPronunciationReplacementSound;
-
-    @Column(name = "sound_pronunciation_combination_character", nullable = true)
-    private String soundPronunciationCombinationCharacter;
-
-    @Column(name = "sound_pronunciation_combination_sound", nullable = true)
-    private String soundPronunciationCombinationSound;
-
-    @Column(name = "stats_frequency")
-    private double statsFrequency;
-
-    @Column(name = "stats_appearences")
-    private double statsAppearences;
-
-    @Column(name = "unicode")
+    private KoreanSound sound;
+    private KoreanBuildStats stats;
     private String unicode;
+    private KoreanCharacterChildren children;
 
-    // constructors, and get-set methods
     public KB() {}
-
-    public KB(
-        String character,
-        String build,
-        boolean complete
-    ) {
-        this.character = character;
-        this.build = build;
-        this.complete = complete;
-    }
-
-    // advanced constructor (without pronunciation)
+    
     public KB(
         String character,
         String build,
         boolean complete,
-        String soundKey,
-        boolean soundSilent,
-        boolean soundReplace,
-        double statsFrequency,
-        double statsAppearences,
-        String unicode
-    ) {
-        this.character = character;
-        this.build = build;
-        this.complete = complete;
-        this.soundKey = soundKey;
-        this.soundSilent = soundSilent;
-        this.soundReplace = soundReplace;
-        this.statsFrequency = statsFrequency;
-        this.statsAppearences = statsAppearences;
-        this.unicode = unicode;
-    }
-
-    // advanced constructor (all components including pronunciation)
-    public KB(
-        String character,
-        String build,
-        boolean complete,
-        String soundKey,
-        boolean soundSilent,
-        boolean soundReplace,
-        double statsFrequency,
-        double statsAppearences,
+        KoreanSound sound,
+        KoreanBuildStats stats,
         String unicode,
-        String soundPronunciationType,
-        String soundPronunciationAdditionalCharacter,
-        String soundPronunciationAdditionalSound,
-        String soundPronunciationReplacementCharacter,
-        String soundPronunciationReplacementSound,
-        String soundPronunciationCombinationCharacter,
-        String soundPronunciationCombinationSound
+        KoreanCharacterChildren children
     ) {
         this.character = character;
         this.build = build;
         this.complete = complete;
-        this.soundKey = soundKey;
-        this.soundSilent = soundSilent;
-        this.soundReplace = soundReplace;
-        this.statsFrequency = statsFrequency;
-        this.statsAppearences = statsAppearences;
+        this.sound = sound;
+        this.stats = stats;
         this.unicode = unicode;
-        this.soundPronunciationType = soundPronunciationType;
-        this.soundPronunciationAdditionalCharacter = soundPronunciationAdditionalCharacter;
-        this.soundPronunciationAdditionalSound = soundPronunciationAdditionalSound;
-        this.soundPronunciationReplacementCharacter = soundPronunciationReplacementCharacter;
-        this.soundPronunciationReplacementSound = soundPronunciationReplacementSound;
-        this.soundPronunciationCombinationCharacter = soundPronunciationCombinationCharacter;
-        this.soundPronunciationCombinationSound = soundPronunciationCombinationSound;
+        this.children = children;
     }
 
-    public long getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -157,104 +63,24 @@ public class KB {
         return this.complete;
     }
 
-    public void setCompleteStatus(boolean newStatus) {
-        this.complete = newStatus;
+    public void setCompleteStatus(boolean newCompleteStatus) {
+        this.complete = newCompleteStatus;
     }
 
-    public String getSoundKey() {
-        return this.soundKey;
+    public KoreanSound getSound() {
+        return this.sound;
     }
 
-    public void setSoundKey(String newSoundKey) {
-        this.soundKey = newSoundKey;
+    public void setSound(KoreanSound newSound) {
+        this.sound = newSound;
     }
 
-    public boolean getSoundSilent() {
-        return this.soundSilent;
+    public KoreanBuildStats getStats() {
+        return this.stats;
     }
 
-    public void setSoundSilent(boolean newSoundSilent) {
-        this.soundSilent = newSoundSilent;
-    }
-
-    public boolean getSoundReplace() {
-        return this.soundReplace;
-    }
-
-    public void setSoundReplace(boolean newSoundReplace) {
-        this.soundReplace = newSoundReplace;
-    }
-
-    public String getSoundPronunciationType() {
-        return this.soundPronunciationType;
-    }
-
-    public void setSoundPronunciationType(String newSoundPronunciationType) {
-        this.soundPronunciationType = newSoundPronunciationType;
-    }
-
-    public String getSoundPronunciationAdditionalCharacter() {
-        return this.soundPronunciationAdditionalCharacter;
-    }
-
-    public void setSoundPronunciationAdditionalCharacter(String newCharacter) {
-        this.soundPronunciationAdditionalCharacter = newCharacter;
-    }
-
-    public String getSoundPronunciationAdditionalSound() {
-        return this.soundPronunciationAdditionalSound;
-    }
-
-    public void setSoundPronunciationAdditionalSound(String newSound) {
-        this.soundPronunciationAdditionalSound = newSound;
-    }
-
-    public String getSoundPronunciationReplacementCharacter() {
-        return this.soundPronunciationReplacementCharacter;
-    }
-
-    public void setSoundPronunciationReplacementCharacter(String newCharacter) {
-        this.soundPronunciationReplacementCharacter = newCharacter;
-    }
-
-    public String getSoundPronunciationReplacementSound() {
-        return this.soundPronunciationReplacementSound;
-    }
-
-    public void setSoundPronunciationReplacementSound(String newSound) {
-        this.soundPronunciationReplacementSound = newSound;
-    }
-
-    public String getSoundPronunciationCombinationCharacter() {
-        return this.soundPronunciationCombinationCharacter;
-    }
-
-    public void setSoundPronunciationCombinationCharacter(String newCharacter) {
-        this.soundPronunciationCombinationCharacter = newCharacter;
-    }
-
-    public String getSoundPronunciationCombinationSound() {
-        return this.soundPronunciationCombinationSound;
-    }
-
-    public void setSoundPronunciationCombinationSound(String newSound) {
-        this.soundPronunciationCombinationSound = newSound;
-    }
-
-    public double getStatsFrequency() {
-        return this.statsFrequency;
-    }
-
-    public void setStatsFrequency(double newFrequency) {
-        this.statsFrequency = newFrequency;
-    }
-
-    public double getStatsAppearences() {
-        return this.statsAppearences;
-    }
-
-    public void setStatsAppearences(double newAppearences) {
-        this.statsAppearences = newAppearences;
+    public void setStats(KoreanBuildStats newStats) {
+        this.stats = newStats;
     }
 
     public String getUnicode() {
@@ -265,11 +91,323 @@ public class KB {
         this.unicode = newUnicode;
     }
 
+    public KoreanCharacterChildren getChildren() {
+        return this.children;
+    }
+
+    public void setChildren(KoreanCharacterChildren newChildren) {
+        this.children = newChildren;
+    }
+
     @Override
     public String toString() {
         return String.format(
-            "Korean Character Build: [id=%d, character=%s, build=%s, complete=%b]",
-            id, character, build, complete
+            """
+            [
+                ID=%s
+                Character=%s
+                Build=%s
+                Complete=%b
+                Sound=%s
+                Stats=%s
+                Unicode=%s
+                Children=%s 
+            ]       
+            """,
+            id, character, build, complete, sound.toString(), stats.toString(), unicode, children.toString()
+        );
+    }
+}
+
+class KoreanSound {
+
+    private String key;
+    private boolean silent;
+    private boolean replace;
+    private KoreanPronunciation pronunciation;
+
+    public KoreanSound() {}
+
+    public KoreanSound(
+        String key,
+        boolean silent,
+        boolean replace
+    ) {
+        this.key = key;
+        this.silent = silent;
+        this.replace = replace;
+    }
+
+    public KoreanSound(
+        String key,
+        boolean silent,
+        boolean replace,
+        KoreanPronunciation pronunciation
+    ) {
+        this.key = key;
+        this.silent = silent;
+        this.replace = replace;
+        this.pronunciation = pronunciation;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setKey(String newKey) {
+        this.key = newKey;
+    }
+
+    public boolean getSilentStatus() {
+        return this.silent;
+    }
+
+    public void setSilentStatus(boolean newSilentStatus) {
+        this.silent = newSilentStatus;
+    }
+
+    public boolean getReplaceStatus() {
+        return this.replace;
+    }
+
+    public void setReplaceStatus(boolean newReplaceStatus) {
+        this.replace = newReplaceStatus;
+    }
+
+    public KoreanPronunciation getPronunciation() {
+        return this.pronunciation;
+    }
+
+    public void setPronunciation(KoreanPronunciation newPronunciation) {
+        this.pronunciation = newPronunciation;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            """
+            [
+                Key=%s
+                Silent=%b
+                Replace=%b
+                Pronunciation=%s
+            ]        
+            """,
+            key, silent, replace, pronunciation.toString()
+        );
+    }
+
+}
+
+class KoreanBuildStats {
+
+    private double frequency;
+    private int appearences;
+
+    public KoreanBuildStats() {}
+
+    public KoreanBuildStats(
+        double frequency,
+        int appearences
+    ) {
+        this.frequency = frequency;
+        this.appearences = appearences;
+    }
+
+    public double getFrequency() {
+        return this.frequency;
+    }
+
+    public void setFrequency(double newFrequency) {
+        this.frequency = newFrequency;
+    }
+
+    public int getAppearences() {
+        return this.appearences;
+    }
+
+    public void setAppearences(int newAppearences) {
+        this.appearences = newAppearences;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            """
+            [
+                Frequency=%d
+                Appearences=%d
+            ]  
+            """,
+            frequency, appearences
+        );
+    }
+
+}
+
+class KoreanCharacterChildren {
+
+    private ArrayList<KB> consonants;
+    private ArrayList<KB> vowels;
+
+    public KoreanCharacterChildren() {}
+
+    public KoreanCharacterChildren(
+        ArrayList<KB> consonants
+    ) {
+        this.consonants = consonants;
+    }
+
+    public KoreanCharacterChildren(
+        ArrayList<KB> consonants,
+        ArrayList<KB> vowels
+    ) {
+        this.consonants = consonants;
+        this.vowels = vowels;
+    }
+
+    public ArrayList<KB> getConsonants() {
+        return this.consonants;
+    }
+
+    public void setConsonants(ArrayList<KB> newConsonants) {
+        this.consonants = newConsonants;
+    }
+
+    public ArrayList<KB> getVowels() {
+        return this.vowels;
+    }
+
+    public void setVowels(ArrayList<KB> newVowels) {
+        this.vowels = newVowels;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            """
+            [
+                Consonants=%s
+                Vowels=%s
+            ]      
+            """,
+            consonants.toString(), vowels.toString()
+        );
+    }
+
+}
+
+class KoreanPronunciationProperty {
+
+    private String character;
+    private String sound;
+
+    public KoreanPronunciationProperty() {}
+
+    public KoreanPronunciationProperty(
+        String character,
+        String sound
+    ) {
+        this.character = character;
+        this.sound = sound;
+    }
+
+    public String getCharacter() {
+        return this.character;
+    }
+
+    public void setCharacter(String newCharacter) {
+        this.character = newCharacter;
+    }
+
+    public String getSound() {
+        return this.sound;
+    }
+
+    public void setSound(String newSound) {
+        this.sound = newSound;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            """
+            [
+                Pronunciation character=%s
+                Pronunciation sound=%s
+            ]   
+            """,
+            character, sound
+        );
+    }
+
+}
+
+class KoreanPronunciation {
+
+    private String type;
+    private KoreanPronunciationProperty additional;
+    private KoreanPronunciationProperty replacement;
+    private KoreanPronunciationProperty combination;
+
+    public KoreanPronunciation() {}
+
+    public KoreanPronunciation(
+        String type,
+        KoreanPronunciationProperty additional,
+        KoreanPronunciationProperty replacement,
+        KoreanPronunciationProperty combination
+    ) {
+        this.type = type;
+        this.additional = additional;
+        this.replacement = replacement;
+        this.combination = combination;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String newType) {
+        this.type = newType;
+    }
+
+    public KoreanPronunciationProperty getAdditional() {
+        return this.additional;
+    }
+
+    public void setAdditional(KoreanPronunciationProperty newAdditional) {
+        this.additional = newAdditional;
+    }
+
+    public KoreanPronunciationProperty getReplacement() {
+        return this.replacement;
+    }
+
+    public void setReplacement(KoreanPronunciationProperty newReplacement) {
+        this.replacement = newReplacement;
+    }
+
+    public KoreanPronunciationProperty getCombination() {
+        return this.combination;
+    }
+
+    public void setCombination(KoreanPronunciationProperty newCombination) {
+        this.combination = newCombination;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            """
+            [
+                Pronunciation type=%s
+                Additional=%s
+                Replacement=%s
+                Combination=%s
+            ]      
+            """,
+            type, additional.toString(), replacement.toString(), combination.toString()
         );
     }
 }
