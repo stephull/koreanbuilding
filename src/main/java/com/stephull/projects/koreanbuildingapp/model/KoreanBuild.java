@@ -4,9 +4,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Document(collection="KoreanBuilds")
-public class KB {
+public class KoreanBuild {
 
     @Id
     private String id;
@@ -19,9 +20,9 @@ public class KB {
     private String unicode;
     private KoreanCharacterChildren children;
 
-    public KB() {}
+    public KoreanBuild() {}
     
-    public KB(
+    public KoreanBuild(
         String character,
         String build,
         boolean complete,
@@ -247,38 +248,32 @@ class KoreanBuildStats {
 
 class KoreanCharacterChildren {
 
-    private ArrayList<KB> consonants;
-    private ArrayList<KB> vowels;
+    private Optional<ArrayList<KoreanBuild>> consonants;
+    private Optional<ArrayList<KoreanBuild>> vowels;
 
     public KoreanCharacterChildren() {}
 
     public KoreanCharacterChildren(
-        ArrayList<KB> consonants
-    ) {
-        this.consonants = consonants;
-    }
-
-    public KoreanCharacterChildren(
-        ArrayList<KB> consonants,
-        ArrayList<KB> vowels
+        Optional<ArrayList<KoreanBuild>> consonants,
+        Optional<ArrayList<KoreanBuild>> vowels
     ) {
         this.consonants = consonants;
         this.vowels = vowels;
     }
 
-    public ArrayList<KB> getConsonants() {
-        return this.consonants;
+    public ArrayList<KoreanBuild> getConsonants() {
+        return this.consonants.orElse(new ArrayList<KoreanBuild>());
     }
 
-    public void setConsonants(ArrayList<KB> newConsonants) {
+    public void setConsonants(Optional<ArrayList<KoreanBuild>> newConsonants) {
         this.consonants = newConsonants;
     }
 
-    public ArrayList<KB> getVowels() {
-        return this.vowels;
+    public ArrayList<KoreanBuild> getVowels() {
+        return this.vowels.orElse(new ArrayList<KoreanBuild>());
     }
 
-    public void setVowels(ArrayList<KB> newVowels) {
+    public void setVowels(Optional<ArrayList<KoreanBuild>> newVowels) {
         this.vowels = newVowels;
     }
 
@@ -347,16 +342,16 @@ class KoreanPronunciation {
 
     private String type;
     private KoreanPronunciationProperty additional;
-    private KoreanPronunciationProperty replacement;
-    private KoreanPronunciationProperty combination;
+    private Optional<KoreanPronunciationProperty> replacement;
+    private Optional<KoreanPronunciationProperty> combination;
 
     public KoreanPronunciation() {}
 
     public KoreanPronunciation(
         String type,
         KoreanPronunciationProperty additional,
-        KoreanPronunciationProperty replacement,
-        KoreanPronunciationProperty combination
+        Optional<KoreanPronunciationProperty> replacement,
+        Optional<KoreanPronunciationProperty> combination
     ) {
         this.type = type;
         this.additional = additional;
@@ -381,18 +376,18 @@ class KoreanPronunciation {
     }
 
     public KoreanPronunciationProperty getReplacement() {
-        return this.replacement;
+        return this.replacement.orElse(null);
     }
 
-    public void setReplacement(KoreanPronunciationProperty newReplacement) {
+    public void setReplacement(Optional<KoreanPronunciationProperty> newReplacement) {
         this.replacement = newReplacement;
     }
 
     public KoreanPronunciationProperty getCombination() {
-        return this.combination;
+        return this.combination.orElse(null);
     }
 
-    public void setCombination(KoreanPronunciationProperty newCombination) {
+    public void setCombination(Optional<KoreanPronunciationProperty> newCombination) {
         this.combination = newCombination;
     }
 

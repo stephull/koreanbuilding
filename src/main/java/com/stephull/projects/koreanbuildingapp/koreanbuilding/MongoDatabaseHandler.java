@@ -1,6 +1,6 @@
 package com.stephull.projects.koreanbuildingapp.koreanbuilding;
 
-import com.stephull.projects.koreanbuildingapp.model.KB;
+import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class MongoDatabaseHandler {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public void insertBuild(KB build) {
+    public void insertBuild(KoreanBuild build) {
         mongoTemplate.insert(build);
         System.out.println(
             String.format("Korean build [%s] inserted successfully", build)

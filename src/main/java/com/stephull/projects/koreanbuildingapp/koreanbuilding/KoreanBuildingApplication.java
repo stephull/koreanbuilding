@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.stephull.projects.koreanbuildingapp.model.KB;
+import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
 
 @SpringBootApplication
 @ComponentScan(basePackages="com.stephull.projects")
@@ -17,7 +17,7 @@ public class KoreanBuildingApplication {
 
 		MongoDatabaseHandler mongoDBHandler = context.getBean(MongoDatabaseHandler.class);
 
-		KB testBuild = new KB();
+		KoreanBuild testBuild = new KoreanBuild();
 		
 		mongoDBHandler.insertBuild(testBuild);
 	}

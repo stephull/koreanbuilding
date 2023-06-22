@@ -42,7 +42,7 @@ public class ProfileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Profile> getProfileById(
-        @PathVariable("id") long id
+        @PathVariable("id") String id
     ) {
         Optional<Profile> profData = profRepo.findById(id);
         return (profData.isPresent())

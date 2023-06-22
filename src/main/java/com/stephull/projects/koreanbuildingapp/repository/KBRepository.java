@@ -3,19 +3,17 @@ package com.stephull.projects.koreanbuildingapp.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.stereotype.Repository;
 
-import com.stephull.projects.koreanbuildingapp.model.KB;
+import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
 
 import java.util.List;
 
 import java.lang.StringBuilder;
 
-@Repository
-public interface KBRepository extends JpaRepository<KB, String> {
+public interface KBRepository extends JpaRepository<KoreanBuild, String> {
 
     @Query(value="", nativeQuery=true)
-    List<KB> findKoreanBuildsBySQLQuery(
+    List<KoreanBuild> findKoreanBuildsBySQLQuery(
         String string, MapSqlParameterSource mapSqlParameterSource
     );
 
@@ -25,36 +23,36 @@ public interface KBRepository extends JpaRepository<KB, String> {
     /*
      * 
      */
-    default List<KB> findByBuildContaining(String inquiry) {
-        queryCreator.append();
-        msps.addValue();
+    default List<KoreanBuild> findByBuildContaining(String inquiry) {
+        //queryCreator.append();
+        //msps.addValue();
         return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
     }
     
     /*
      * 
      */
-    default List<KB> findBuildChildren(String inquiry) {
-        queryCreator.append();
-        msps.addValue();
+    default List<KoreanBuild> findBuildChildren(String inquiry) {
+        //queryCreator.append();
+        //msps.addValue();
         return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
     }
     
     /*
      * 
      */
-    default List<KB> retrieveDictionaryByBuild(String inquiry) {
-        queryCreator.append();
-        msps.addValue();
+    default List<KoreanBuild> retrieveDictionaryByBuild(String inquiry) {
+        //queryCreator.append();
+        //msps.addValue();
         return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
     }
     
     /*
      * 
      */
-    default List<KB> findStatisticsByBuild(String inquiry) {
-        queryCreator.append();
-        msps.addValue();
+    default List<KoreanBuild> findStatisticsByBuild(String inquiry) {
+        //queryCreator.append();
+        //msps.addValue();
         return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
     }
 }
