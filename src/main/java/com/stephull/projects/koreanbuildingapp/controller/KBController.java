@@ -1,6 +1,5 @@
 package com.stephull.projects.koreanbuildingapp.controller;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,16 +21,16 @@ public class KBController {
 
     /**
      * Get all available builds, optional containing for all builds with given letter/character
-     * @return ResponseEntity<List<KB>>
+     * @return ResponseEntity<ArrayList<KB>>
      */
     @GetMapping("/")
-    public ResponseEntity<List<KoreanBuild>> getAllBuilds() {
+    public ResponseEntity<ArrayList<KoreanBuild>> getAllBuilds() {
         try {
-            List<KoreanBuild> builds = new ArrayList<KoreanBuild>();
+            ArrayList<KoreanBuild> builds = new ArrayList<KoreanBuild>();
             kbrepo.findAll().forEach(builds::add);
             return (builds.isEmpty())
-                ? new ResponseEntity<List<KoreanBuild>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<KoreanBuild>>(builds, HttpStatus.OK);
+                ? new ResponseEntity<ArrayList<KoreanBuild>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<KoreanBuild>>(builds, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -53,80 +52,80 @@ public class KBController {
     }
 
     @GetMapping("/consonant/first/{character}")
-    public ResponseEntity<List<KoreanBuild>> getCharactersByFirstConsonantsCharacter(
+    public ResponseEntity<ArrayList<KoreanBuild>> getCharactersByFirstConsonantsCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstVowel,
         @RequestParam Optional<String> lastVowel,
         @RequestParam Optional<String> lastConsonant
     ) {
         try {
-            List<KoreanBuild> children = new ArrayList<KoreanBuild>();
+            ArrayList<KoreanBuild> children = new ArrayList<KoreanBuild>();
 
             // logic
 
             return (children.isEmpty())
-                ? new ResponseEntity<List<KoreanBuild>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<KoreanBuild>>(children, HttpStatus.OK);
+                ? new ResponseEntity<ArrayList<KoreanBuild>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<KoreanBuild>>(children, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/vowel/first/{character}")
-    public ResponseEntity<List<KoreanBuild>> getCharactersByFirstVowelCharacter(
+    public ResponseEntity<ArrayList<KoreanBuild>> getCharactersByFirstVowelCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstConsonant,
         @RequestParam Optional<String> lastVowel,
         @RequestParam Optional<String> lastConsonant
     ) {
         try {
-            List<KoreanBuild> children = new ArrayList<KoreanBuild>();
+            ArrayList<KoreanBuild> children = new ArrayList<KoreanBuild>();
 
             // logic 
 
             return (children.isEmpty())
-                ? new ResponseEntity<List<KoreanBuild>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<KoreanBuild>>(children, HttpStatus.OK);
+                ? new ResponseEntity<ArrayList<KoreanBuild>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<KoreanBuild>>(children, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/vowel/second/{character}")
-    public ResponseEntity<List<KoreanBuild>> getCharactersBySecondVowelCharacter(
+    public ResponseEntity<ArrayList<KoreanBuild>> getCharactersBySecondVowelCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstConsonant,
         @RequestParam Optional<String> firstVowel,
         @RequestParam Optional<String> lastConsonant
     ) {
         try {
-            List<KoreanBuild> children = new ArrayList<KoreanBuild>();
+            ArrayList<KoreanBuild> children = new ArrayList<KoreanBuild>();
 
             // logic 
 
             return (children.isEmpty())
-                ? new ResponseEntity<List<KoreanBuild>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<KoreanBuild>>(children, HttpStatus.OK);
+                ? new ResponseEntity<ArrayList<KoreanBuild>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<KoreanBuild>>(children, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/consonant/second/{character}")
-    public ResponseEntity<List<KoreanBuild>> getCharactersByEndingConsonantCharacter(
+    public ResponseEntity<ArrayList<KoreanBuild>> getCharactersByEndingConsonantCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstConsonant,
         @RequestParam Optional<String> firstVowel,
         @RequestParam Optional<String> secondVowel
     ) {
         try {
-            List<KoreanBuild> children = new ArrayList<KoreanBuild>();
+            ArrayList<KoreanBuild> children = new ArrayList<KoreanBuild>();
 
             // logic 
 
             return (children.isEmpty())
-                ? new ResponseEntity<List<KoreanBuild>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<KoreanBuild>>(children, HttpStatus.OK);
+                ? new ResponseEntity<ArrayList<KoreanBuild>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<KoreanBuild>>(children, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

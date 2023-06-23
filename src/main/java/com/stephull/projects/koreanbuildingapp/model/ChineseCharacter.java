@@ -94,7 +94,9 @@ public class ChineseCharacter {
         return this.comparisons.orElse(new ArrayList<LinguisticComparison>());
     }
 
-    public void setComparisons(Optional<ArrayList<LinguisticComparison>> newComparisons) {
+    public void setComparisons(
+        Optional<ArrayList<LinguisticComparison>> newComparisons
+    ) {
         this.comparisons = newComparisons;
     }
 
@@ -198,19 +200,27 @@ class Radical {
 class LinguisticComparison {
 
     private Language language;
-    private AuditoryData sound;
     private String context;
+    private Optional<AuditoryData> sound;
 
     public LinguisticComparison() {}
 
     public LinguisticComparison(
         Language language, 
-        AuditoryData sound,
         String context
     ) {
         this.language = language;
-        this.sound = sound;
         this.context = context;
+    }
+
+    public LinguisticComparison(
+        Language language,
+        String context,
+        Optional<AuditoryData> sound
+    ) {
+        this.language = language;
+        this.context = context;
+        this.sound = sound;
     }
 
     public Language getLanguage() {
@@ -222,10 +232,10 @@ class LinguisticComparison {
     }
 
     public AuditoryData getSound() {
-        return this.sound;
+        return this.sound.orElse(null);
     }
 
-    public void setSound(AuditoryData newSound) {
+    public void setSound(Optional<AuditoryData> newSound) {
         this.sound = newSound;
     }
 
@@ -243,11 +253,12 @@ class LinguisticComparison {
             """
             [
                 Language=%s
-                Sound=%s
                 Context=%s
+                Sound=%s
             ]     
             """,
-            language.toString(), sound.toString(), context
+            language.toString(), context,
+            sound.orElse(null).toString()
         );
     }
 

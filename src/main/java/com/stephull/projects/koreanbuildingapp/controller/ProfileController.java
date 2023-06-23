@@ -1,6 +1,5 @@
 package com.stephull.projects.koreanbuildingapp.controller;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -21,11 +20,11 @@ public class ProfileController {
     protected ProfileRepository profRepo;
 
     @GetMapping("/")
-    public ResponseEntity<List<Profile>> getAllProfiles(
+    public ResponseEntity<ArrayList<Profile>> getAllProfiles(
         @RequestParam(required=false) String username
     ) {
         try {
-            List<Profile> profiles = new ArrayList<Profile>();
+            ArrayList<Profile> profiles = new ArrayList<Profile>();
             if (username != null) {
                 profRepo.findByUsername(username).forEach(profiles::add);
             }
@@ -33,8 +32,8 @@ public class ProfileController {
                 profRepo.findAll().forEach(profiles::add);
             }
             return (profiles.isEmpty())
-                ? new ResponseEntity<List<Profile>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<Profile>>(profiles, HttpStatus.OK); 
+                ? new ResponseEntity<ArrayList<Profile>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<Profile>>(profiles, HttpStatus.OK); 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -51,15 +50,15 @@ public class ProfileController {
     }
 
     @GetMapping("/stats/{level}")
-    public ResponseEntity<List<Profile>> getProfileStatsByLevel(
-        @PathVariable("level") long level
+    public ResponseEntity<ArrayList<Profile>> getProfileStatsByLevel(
+        @PathVariable("level") int level
     ) {
         try {
-            List<Profile> profiles = new ArrayList<Profile>();
+            ArrayList<Profile> profiles = new ArrayList<Profile>();
             profRepo.findByLevel(level).forEach(profiles::add);
             return (profiles.isEmpty()) 
-                ? new ResponseEntity<List<Profile>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<List<Profile>>(profiles, HttpStatus.OK);
+                ? new ResponseEntity<ArrayList<Profile>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<ArrayList<Profile>>(profiles, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

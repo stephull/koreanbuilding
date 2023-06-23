@@ -108,7 +108,9 @@ public class Profile {
         return this.buildsCompleted.orElse(new ArrayList<KoreanBuild>());
     }
 
-    public void setBuildsCompleted(Optional<ArrayList<KoreanBuild>> newBuildsCompleted) {
+    public void setBuildsCompleted(
+        Optional<ArrayList<KoreanBuild>> newBuildsCompleted
+    ) {
         this.buildsCompleted = newBuildsCompleted;
     }
 

@@ -1,66 +1,42 @@
 package com.stephull.projects.koreanbuildingapp.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import java.util.ArrayList;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
 
-import java.util.List;
-
-import java.lang.StringBuilder;
-
-public interface KBRepository extends JpaRepository<KoreanBuild, String> {
-
-    @Query(value="", nativeQuery=true)
-    List<KoreanBuild> findKoreanBuildsBySQLQuery(
-        String string, MapSqlParameterSource mapSqlParameterSource
-    );
-
-    StringBuilder queryCreator = new StringBuilder("SELECT * FROM korean_builds ");
-    MapSqlParameterSource msps = new MapSqlParameterSource();
-
-    /*
-     * 
-     */
-    default List<KoreanBuild> findByBuildContaining(String inquiry) {
-        //queryCreator.append();
-        //msps.addValue();
-        return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
-    }
+public interface KBRepository extends MongoRepository<KoreanBuild, String> {
     
-    /*
-     * 
-     */
-    default List<KoreanBuild> findBuildChildren(String inquiry) {
-        //queryCreator.append();
-        //msps.addValue();
-        return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
-    }
+    @Query(
+        value="""
+        $or: [
+            {
+                'children.consonants.build': {
+                    $ne: ''
+                }
+            }
+        ]        
+        """
+            // still looking at this...
+    )
+    ArrayList<KoreanBuild> findAllCharacterChildren(String character);
+
+    @Query(
+        value=""
+    )
+    ArrayList<KoreanBuild> findAllBuildChildren(String build);
     
-    /*
-     * 
-     */
-    default List<KoreanBuild> retrieveDictionaryByBuild(String inquiry) {
-        //queryCreator.append();
-        //msps.addValue();
-        return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
-    }
+    @Query(
+        value="{'build': ?O}"
+    )
+    ArrayList<KoreanBuild> retrieveDictionaryByBuild(String build); 
     
-    /*
-     * 
-     */
-    default List<KoreanBuild> findStatisticsByBuild(String inquiry) {
-        //queryCreator.append();
-        //msps.addValue();
-        return findKoreanBuildsBySQLQuery(queryCreator.toString(), msps);
-    }
+    @Query(
+        value="{'build': ?O}", 
+        fields="{'frequency': 1, 'appearences': 1}"
+    )
+    ArrayList<KoreanBuild> findStatsByBuild(String build);
+
 }
-
-// ::: NOTES :::
-
-// findBuildChildren(String inquiry)
-// return list of korean consonants or vowels that exist from given inquiry
-
-// retrieveDictionaryBuild(String inquiry)
-// return list of korean words/letters that give context to user based on given inquiry
