@@ -15,6 +15,7 @@ public class KorEngDictionary {
     @Id
     private String id;
 
+    private KEDID kedid;
     private String entry;
     private ArrayList<DictionaryDefinition> definitions;
     private AuditoryData sound;
@@ -46,6 +47,14 @@ public class KorEngDictionary {
 
     public String getId() {
         return this.id;
+    }
+
+    public String getKedId() {
+        return this.kedid.getCustomID();
+    }
+
+    public void setKedId(String newKedId) {
+        this.kedid.setCustomID(newKedId);
     }
 
     public String getEntry() {
@@ -105,7 +114,7 @@ class DictionaryDefinition {
     private String entryType;    // noun, verb, adverb, etc.
     private String meaning;
     private Optional<String> context;   // a.k.a examples
-    private Optional<LinkedHashMap<ChineseCharacter, KoreanBuild>> hanja;
+    private Optional<LinkedHashMap<ChineseOrigin, KoreanBuild>> hanja;
 
     public String getTranslation() {
         return this.translation;
@@ -139,12 +148,12 @@ class DictionaryDefinition {
         this.context = newContext;
     }
 
-    public LinkedHashMap<ChineseCharacter, KoreanBuild> getHanja() {
-        return this.hanja.orElse(new LinkedHashMap<ChineseCharacter, KoreanBuild>());
+    public LinkedHashMap<ChineseOrigin, KoreanBuild> getHanja() {
+        return this.hanja.orElse(new LinkedHashMap<ChineseOrigin, KoreanBuild>());
     }
 
     public void setHanja(
-        Optional<LinkedHashMap<ChineseCharacter, KoreanBuild>> newHanja
+        Optional<LinkedHashMap<ChineseOrigin, KoreanBuild>> newHanja
     ) {
         this.hanja = newHanja;
     }
@@ -161,8 +170,8 @@ class DictionaryDefinition {
                 Hanja=%s
             ]
             """,
-            translation, entryType, meaning, context.orElse(""),
-            hanja.orElse(new LinkedHashMap<ChineseCharacter, KoreanBuild>()).toString()
+            translation, entryType, meaning, context.orElse("None"),
+            hanja.orElse(new LinkedHashMap<ChineseOrigin, KoreanBuild>()).toString()
         );
     }
 

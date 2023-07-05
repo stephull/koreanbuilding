@@ -130,7 +130,7 @@ public class Profile {
             """,
             id, username, level, daysActive,
             fluencyScore.orElse(0),
-            biography.orElse(""),
+            biography.orElse("None"),
             buildsCompleted.orElse(new ArrayList<KoreanBuild>()).toString() 
         );
     }

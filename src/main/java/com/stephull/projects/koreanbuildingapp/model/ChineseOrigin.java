@@ -3,11 +3,16 @@ package com.stephull.projects.koreanbuildingapp.model;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="ChineseOrigin")
-public class ChineseCharacter {
+public class ChineseOrigin {
     
+    @Id
+    private String id;
+
+    private COID coid;
     private String character;
     private String unicode;
     private ArrayList<Radical> radicals;
@@ -16,9 +21,9 @@ public class ChineseCharacter {
     private Optional<ArrayList<LinguisticComparison>> comparisons;
     private Optional<Boolean> simplified;
 
-    public ChineseCharacter() {}
+    public ChineseOrigin() {}
 
-    public ChineseCharacter(
+    public ChineseOrigin(
         String character,
         String unicode,
         ArrayList<Radical> radicals,
@@ -32,7 +37,7 @@ public class ChineseCharacter {
         this.definitions = definitions;
     }
 
-    public ChineseCharacter(
+    public ChineseOrigin(
         String character,
         String unicode,
         ArrayList<Radical> radicals,
@@ -48,6 +53,18 @@ public class ChineseCharacter {
         this.definitions = definitions;
         this.comparisons = comparisons;
         this.simplified = simplified;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getCoId() {
+        return this.coid.getCustomID();
+    }
+
+    public void setCoId(String newCoId) {
+        this.coid.setCustomID(newCoId);
     }
 
     public String getCharacter() {
@@ -191,7 +208,7 @@ class Radical {
                 Basic form=%s
             ]
             """,
-            radical, unicode, basic.orElse("")
+            radical, unicode, basic.orElse("None")
         );
     }
 

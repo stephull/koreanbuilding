@@ -64,7 +64,7 @@ public class VisualData {
             ]     
             """,
             imageFile.getAbsolutePath(), source,
-            description.orElse("")
+            description.orElse("None")
         );
     }
 
