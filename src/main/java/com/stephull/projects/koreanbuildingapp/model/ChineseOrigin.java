@@ -37,14 +37,14 @@ public class ChineseOrigin {
         String unicode,
         int strokeCount,
         ArrayList<String> definitions,
-        Optional<ArrayList<LinguisticComparison>> comparisons,
-        Optional<Boolean> simplified
+        ArrayList<LinguisticComparison> comparisons,
+        Boolean simplified
     ) {
         this.character = character;
         this.unicode = unicode;
         this.definitions = definitions;
-        this.comparisons = comparisons;
-        this.simplified = simplified;
+        this.comparisons = Optional.ofNullable(comparisons);
+        this.simplified = Optional.ofNullable(simplified);
     }
 
     public String getId() {
@@ -103,7 +103,7 @@ public class ChineseOrigin {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Character=%s
@@ -113,10 +113,13 @@ public class ChineseOrigin {
                 Simplified=%b
             ]
             """,
-            character, unicode, definitions.toString(),
-            comparisons.orElse(new ArrayList<LinguisticComparison>()).toString(),
-            simplified.orElse(null)
+            character, 
+            unicode, 
+            definitions,
+            comparisons,
+            simplified
         );
+        return ret.indent(2);
     }
 
 }
@@ -173,7 +176,7 @@ class LinguisticComparison {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Language=%s
@@ -181,9 +184,9 @@ class LinguisticComparison {
                 Sound=%s
             ]     
             """,
-            language.toString(), context,
-            sound.orElse(null).toString()
+            language, context, sound
         );
+        return ret.indent(2);
     }
 
 }

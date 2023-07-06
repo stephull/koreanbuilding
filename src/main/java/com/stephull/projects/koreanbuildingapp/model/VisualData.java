@@ -22,11 +22,11 @@ public class VisualData {
     public VisualData(
         File file,
         String source,
-        Optional<String> description
+        String description
     ) {
         this.file = file;
         this.source = source;
-        this.description = description;
+        this.description = Optional.ofNullable(description);
     }
 
     public File getFile() {
@@ -55,7 +55,7 @@ public class VisualData {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Image file (path)=%s
@@ -63,9 +63,10 @@ public class VisualData {
                 Description=%s
             ]     
             """,
-            file.getAbsolutePath(), source,
-            description.orElse("None")
+            file.getAbsolutePath().toString(), 
+            source, description
         );
+        return ret.indent(2);
     }
 
 }

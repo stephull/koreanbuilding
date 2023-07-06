@@ -74,7 +74,7 @@ public class KoreanSpeech {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Letter=%s
@@ -84,6 +84,7 @@ public class KoreanSpeech {
             """,
             letter, normalSound, endingSound
         );
+        return ret.indent(2);
     }
 
 }

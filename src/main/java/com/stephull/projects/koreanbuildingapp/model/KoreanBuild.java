@@ -160,7 +160,7 @@ public class KoreanBuild {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Official ID=%s
@@ -187,6 +187,7 @@ public class KoreanBuild {
             vowels,
             dictionary
         );
+        return ret.indent(2);
     }
 }
 
@@ -213,12 +214,12 @@ class KoreanBuildSound {
         String key,
         boolean silent,
         boolean replace,
-        Optional<KoreanPronunciation> pronunciation
+        KoreanPronunciation pronunciation
     ) {
         this.key = key;
         this.silent = silent;
         this.replace = replace;
-        this.pronunciation = pronunciation;
+        this.pronunciation = Optional.ofNullable(pronunciation);
     }
 
     public String getKey() {
@@ -255,7 +256,7 @@ class KoreanBuildSound {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Key=%s
@@ -264,8 +265,9 @@ class KoreanBuildSound {
                 Pronunciation=%s
             ]        
             """,
-            key, silent, replace, pronunciation.toString()
+            key, silent, replace, pronunciation
         );
+        return ret.indent(2);
     }
 
 }
@@ -303,7 +305,7 @@ class KoreanBuildStats {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Frequency=%d
@@ -312,5 +314,6 @@ class KoreanBuildStats {
             """,
             frequency, appearences
         );
+        return ret.indent(2);
     }
 }

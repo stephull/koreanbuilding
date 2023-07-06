@@ -143,7 +143,7 @@ public class ProfileSettings {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Settings name=%s
@@ -173,6 +173,7 @@ public class ProfileSettings {
             resetProgress,
             deleteAccount
         );
+        return ret.indent(2);
     }
 
 }

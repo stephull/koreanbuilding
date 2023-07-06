@@ -43,18 +43,18 @@ public class Profile {
         String pin,
         int level,
         int daysActive,
-        Optional<Integer> fluencyScore,
-        Optional<String> biography,
-        Optional<ArrayList<KoreanBuild>> buildsCompleted,
+        int fluencyScore,
+        String biography,
+        ArrayList<KoreanBuild> buildsCompleted,
         ProfileSettings settings
     ) {
         this.username = username;
         this.pin = pin;
         this.level = level;
         this.daysActive = daysActive;
-        this.fluencyScore = fluencyScore;
-        this.biography = biography;
-        this.buildsCompleted = buildsCompleted;
+        this.fluencyScore = Optional.ofNullable(fluencyScore);
+        this.biography = Optional.ofNullable(biography);
+        this.buildsCompleted = Optional.ofNullable(buildsCompleted);
         this.settings = settings;
     }
 
@@ -102,8 +102,8 @@ public class Profile {
         this.daysActive = newDaysActive;
     }
 
-    public Integer getFluencyScore() {
-        return this.fluencyScore.orElse(0);
+    public int getFluencyScore() {
+        return (int)this.fluencyScore.orElse(0);
     }
 
     public void setFluencyScore(Optional<Integer> newFluencyScore) {
@@ -138,7 +138,7 @@ public class Profile {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 ID=%s
@@ -150,10 +150,14 @@ public class Profile {
                 Builds completed=%s
             ]
             """,
-            id, username, level, daysActive,
-            fluencyScore.orElse(0),
-            biography.orElse("None"),
-            buildsCompleted.orElse(new ArrayList<KoreanBuild>()).toString() 
+            id, 
+            username, 
+            level, 
+            daysActive,
+            fluencyScore,
+            biography,
+            buildsCompleted
         );
+        return ret.indent(2);
     }
 }

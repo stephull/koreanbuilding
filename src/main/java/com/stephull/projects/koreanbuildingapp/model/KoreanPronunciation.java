@@ -21,14 +21,22 @@ public class KoreanPronunciation {
 
     public KoreanPronunciation(
         String type,
-        KoreanPronunciationProperty additional,
-        Optional<KoreanPronunciationProperty> replacement,
-        Optional<KoreanPronunciationProperty> combination
+        KoreanPronunciationProperty additional
     ) {
         this.type = type;
         this.additional = additional;
-        this.replacement = replacement;
-        this.combination = combination;
+    }
+
+    public KoreanPronunciation(
+        String type,
+        KoreanPronunciationProperty additional,
+        KoreanPronunciationProperty replacement,
+        KoreanPronunciationProperty combination
+    ) {
+        this.type = type;
+        this.additional = additional;
+        this.replacement = Optional.ofNullable(replacement);
+        this.combination = Optional.ofNullable(combination);
     }
 
     public String getId() {
@@ -77,7 +85,7 @@ public class KoreanPronunciation {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Pronunciation type=%s
@@ -86,8 +94,9 @@ public class KoreanPronunciation {
                 Combination=%s
             ]      
             """,
-            type, additional.toString(), replacement.toString(), combination.toString()
+            type, additional, replacement, combination
         );
+        return ret.indent(2);
     }
 }
 
@@ -124,7 +133,7 @@ class KoreanPronunciationProperty {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Pronunciation character=%s
@@ -133,5 +142,6 @@ class KoreanPronunciationProperty {
             """,
             character, sound
         );
+        return ret.indent(2);
     }
 }

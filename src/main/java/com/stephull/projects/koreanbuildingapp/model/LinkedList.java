@@ -1,78 +1,101 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
-public class LinkedList {
+public class LinkedList<E> {
     
-    private LinkedListNode head;
-    private LinkedListNode current;
+    private Node<E> head;
+    private Node<E> tail;
 
     public LinkedList() {}
 
     public LinkedList(
-        LinkedListNode head,
-        LinkedListNode current
+        Node<E> head,
+        Node<E> tail
     ) {
         this.head = head;
-        this.current = current;
+        this.tail = tail;
     }
 
-    public LinkedListNode getHead() {
+    public Node<E> getHead() {
         return this.head;
     }
 
-    public void setHead(LinkedListNode newHead) {
+    public void setHead(Node<E> newHead) {
         this.head = newHead;
     }
 
-    public LinkedListNode getCurrent() {
-        return this.current;
+    public Node<E> getTail() {
+        return this.tail;
     }
 
-    public void setCurrent(LinkedListNode newCurrent) {
-        this.current = newCurrent;
+    public void setTail(Node<E> newTail) {
+        this.tail = newTail;
     }
 
-    // other stuff
-
-    public void add(KoreanBuild newData) {
-        LinkedListNode newNode = new LinkedListNode();
-        newNode.setData(newData);
+    public void add(E element) {
+        Node<E> newNode = new Node<E>();
+        newNode.setData(element);
 
         if (head == null) {
             head = newNode;
-            current = newNode;
+            tail = newNode;
         } else {
-            current.setNext(newNode);
-            current = newNode;
+            newNode.setPrev(tail);
+            tail.setNext(newNode);
+            tail = newNode;
         }
     }
 
+    public boolean remove(E element) {
+        Node<E> temp = head;
+
+        while (temp != null) {
+            if (temp.getData().equals(element)) {
+                Node<E> p = temp.getPrev(), n = temp.getNext();
+                if (p != null) {
+                    p.setNext(n);
+                } else {
+                    head = n;
+                }
+
+                if (n != null) {
+                    n.setPrev(p);
+                } else {
+                    tail = p;
+                }
+
+                return true;
+            }
+            temp = temp.getNext();
+        }
+
+        return false;
+    }
+
     public void moveForward() {
-        if (current != null && current.getNext() != null) {
-            current = current.getNext();
+        if (tail != null && tail.getNext() != null) {
+            tail = tail.getNext();
         }
     }
 
     public void moveBackward() {
-        if (current != null && current != head) {
-            LinkedListNode prev = head;
-            while (prev.getNext() != current) {
+        if (tail != null && tail != head) {
+            Node<E> prev = head;
+            while (prev.getNext() != tail) {
                 prev = prev.getNext();
             }
-            current = prev;
+            tail = prev;
         }
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        LinkedListNode temp = head;
-        int count = 0;
+        Node<E> temp = head;
         
         sb.append('\n');
 
         while (temp != null) {
-            sb.append("::: " + (++count) + " :::" + "\n");
-            sb.append(temp.getData());
+            sb.append(temp);
             if (temp.getNext() != null) {
                 sb.append(" -> ");
             } 
@@ -86,69 +109,66 @@ public class LinkedList {
 
 }
 
-class LinkedListNode {
+class Node<E> {
     
-    private LinkedListNode next;
-    private LinkedListNode prev;
-    private KoreanBuild data;
+    private Node<E> next;
+    private Node<E> prev;
+    private E data;
 
-    public LinkedListNode() {}
+    public Node() {}
 
-    public LinkedListNode(
-        LinkedListNode prev,
-        LinkedListNode next,
-        KoreanBuild data
+    public Node(
+        Node<E> prev,
+        Node<E> next,
+        E data
     ) {
         this.next = next;
         this.prev = prev;
         this.data = data;
     }
 
-    public LinkedListNode getNext() {
+    public Node<E> getNext() {
         return this.next;
     }
 
-    public void setNext(LinkedListNode newNext) {
+    public void setNext(Node<E> newNext) {
         this.next = newNext;
     }
 
-    public LinkedListNode getPrev() {
+    public Node<E> getPrev() {
         return this.prev;
     }
 
-    public void setPrev(LinkedListNode newPrev) {
+    public void setPrev(Node<E> newPrev) {
         this.prev = newPrev;
     }
 
-    public KoreanBuild getData() {
+    public E getData() {
         return this.data;
     }
 
-    public void setData(KoreanBuild newData) {
+    public void setData(E newData) {
         this.data = newData;
     }
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
-                Prev (KB ID): %s
-                Next (KB ID): %s
                 Data: %s
             ]   
             """,
-            prev.data.getKbid(),
-            next.data.getKbid(),
-            data.toString()
+            data
         );
+        return ret.indent(2);
     }
 
 }
 
 class LinkedListDemo {
     public static void main(String[] args) {
-        LinkedList list = new LinkedList();
+        LinkedList<KoreanBuild> list = new LinkedList<KoreanBuild>();
 
         KoreanSpeech ks1 = new KoreanSpeech("ㅇ", "x", "ng");
         KoreanBuild kb1 = new KoreanBuild(
@@ -169,6 +189,7 @@ class LinkedListDemo {
         list.add(kb2);
         list.add(kb3);
         
-        System.out.println("FINAL LINKED LIST: " + list.toString());
+        String ret = list.toString();
+        System.out.println("FINAL LINKED LIST: " + ret.indent(2));
     }
 }

@@ -46,7 +46,7 @@ public class AuditoryData {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Audio file (path)=%s
@@ -56,6 +56,7 @@ public class AuditoryData {
             """,
             file.getAbsolutePath(), completeSentence, source
         );
+        return ret.indent(2);
     }
 
 }

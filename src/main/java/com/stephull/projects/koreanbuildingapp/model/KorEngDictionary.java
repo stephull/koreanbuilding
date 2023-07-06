@@ -41,13 +41,13 @@ public class KorEngDictionary {
         ArrayList<CustomID<KoreanBuild>> associatedBuilds,
         ArrayList<DictionaryDefinition> definitions,
         AuditoryData sound,
-        Optional<VisualData> image
+        VisualData image
     ) {
         this.entry = entry;
         this.associatedBuilds = associatedBuilds;
         this.definitions = definitions;
         this.sound = sound;
-        this.image = image;
+        this.image = Optional.ofNullable(image);
     }
 
     public String getId() {
@@ -104,7 +104,7 @@ public class KorEngDictionary {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 ID=%s
@@ -114,9 +114,9 @@ public class KorEngDictionary {
                 Image data=%s
             ]        
             """,
-            id, entry, definitions.toString(), sound.toString(),
-            image.orElse(null).toString()
+            id, entry, definitions, sound, image
         );
+        return ret.indent(2);
     }
 
 }
@@ -173,7 +173,7 @@ class DictionaryDefinition {
 
     @Override
     public String toString() {
-        return String.format(
+        String ret = String.format(
             """
             [
                 Translation=%s
@@ -183,9 +183,9 @@ class DictionaryDefinition {
                 Hanja=%s
             ]
             """,
-            translation, entryType, meaning, context.orElse("None"),
-            hanja.orElse(new LinkedHashMap<KoreanBuild, ChineseOrigin>()).toString()
+            translation, entryType, meaning, context, hanja
         );
+        return ret.indent(2);
     }
 
 }
