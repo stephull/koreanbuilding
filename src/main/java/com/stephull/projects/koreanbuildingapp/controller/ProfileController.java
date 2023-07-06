@@ -1,5 +1,6 @@
 package com.stephull.projects.koreanbuildingapp.controller;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -20,11 +21,11 @@ public class ProfileController {
     protected ProfileRepository profRepo;
 
     @GetMapping("/")
-    public ResponseEntity<ArrayList<Profile>> getAllProfiles(
+    public ResponseEntity<List<Profile>> getAllProfiles(
         @RequestParam(required=false) String username
     ) {
         try {
-            ArrayList<Profile> profiles = new ArrayList<Profile>();
+            List<Profile> profiles = new ArrayList<Profile>();
             if (username != null) {
                 profRepo.findByUsername(username).forEach(profiles::add);
             }
@@ -32,8 +33,8 @@ public class ProfileController {
                 profRepo.findAll().forEach(profiles::add);
             }
             return (profiles.isEmpty())
-                ? new ResponseEntity<ArrayList<Profile>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<ArrayList<Profile>>(profiles, HttpStatus.OK); 
+                ? new ResponseEntity<List<Profile>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<List<Profile>>(profiles, HttpStatus.OK); 
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -49,16 +50,17 @@ public class ProfileController {
             : new ResponseEntity<Profile>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/stats/{level}")
-    public ResponseEntity<ArrayList<Profile>> getProfileStatsByLevel(
-        @PathVariable("level") int level
+    @GetMapping("/stats/{id}/{level}")
+    public ResponseEntity<List<Profile>> getProfileStatsByLevel(
+        @PathVariable("id") String gameId,
+        @PathVariable("level") Integer gameLevel
     ) {
         try {
-            ArrayList<Profile> profiles = new ArrayList<Profile>();
-            profRepo.findByLevel(level).forEach(profiles::add);
+            List<Profile> profiles = new ArrayList<Profile>();
+            profRepo.findByGameIdAndLevel(gameId, gameLevel).forEach(profiles::add);
             return (profiles.isEmpty()) 
-                ? new ResponseEntity<ArrayList<Profile>>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<ArrayList<Profile>>(profiles, HttpStatus.OK);
+                ? new ResponseEntity<List<Profile>>(HttpStatus.NO_CONTENT)
+                : new ResponseEntity<List<Profile>>(profiles, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

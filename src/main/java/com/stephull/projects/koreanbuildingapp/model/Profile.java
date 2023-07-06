@@ -12,6 +12,7 @@ public class Profile {
     @Id
     private String id;
 
+    private CustomID<Profile> profileId;
     private String username;
     private String pin;
     private int level;
@@ -19,6 +20,7 @@ public class Profile {
     private Optional<Integer> fluencyScore;
     private Optional<String> biography;
     private Optional<ArrayList<KoreanBuild>> buildsCompleted;
+    private ProfileSettings settings;
 
     public Profile() {};
 
@@ -26,12 +28,14 @@ public class Profile {
         String username,
         String pin,
         int level,
-        int daysActive
+        int daysActive,
+        ProfileSettings settings
     ) {
         this.username = username;
         this.pin = pin;
         this.level = level;
         this.daysActive = daysActive;
+        this.settings = settings;
     }
 
     public Profile(
@@ -41,7 +45,8 @@ public class Profile {
         int daysActive,
         Optional<Integer> fluencyScore,
         Optional<String> biography,
-        Optional<ArrayList<KoreanBuild>> buildsCompleted
+        Optional<ArrayList<KoreanBuild>> buildsCompleted,
+        ProfileSettings settings
     ) {
         this.username = username;
         this.pin = pin;
@@ -50,10 +55,19 @@ public class Profile {
         this.fluencyScore = fluencyScore;
         this.biography = biography;
         this.buildsCompleted = buildsCompleted;
+        this.settings = settings;
     }
 
     public String getId() {
         return this.id;
+    }
+
+    public String getProfileId() {
+        return this.profileId.getCustomID();
+    }
+
+    public void setProfileId(String newId) {
+        this.profileId.setCustomID(newId);
     }
 
     public String getUsername() {
@@ -112,6 +126,14 @@ public class Profile {
         Optional<ArrayList<KoreanBuild>> newBuildsCompleted
     ) {
         this.buildsCompleted = newBuildsCompleted;
+    }
+
+    public ProfileSettings getProfileSettings() {
+        return this.settings;
+    }  
+
+    public void setProfileSettings(ProfileSettings newSettings) {
+        this.settings = newSettings;
     }
 
     @Override

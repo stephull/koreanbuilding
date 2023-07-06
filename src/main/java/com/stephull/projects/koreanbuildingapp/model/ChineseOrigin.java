@@ -15,8 +15,6 @@ public class ChineseOrigin {
     private CustomID<ChineseOrigin> coid;
     private String character;
     private String unicode;
-    private ArrayList<ChineseRadical> radicals;
-    private int strokeCount;
     private ArrayList<String> definitions;
     private Optional<ArrayList<LinguisticComparison>> comparisons;
     private Optional<Boolean> simplified;
@@ -26,21 +24,17 @@ public class ChineseOrigin {
     public ChineseOrigin(
         String character,
         String unicode,
-        ArrayList<ChineseRadical> radicals,
         int strokeCount,
         ArrayList<String> definitions
     ) {
         this.character = character;
         this.unicode = unicode;
-        this.radicals = radicals;
-        this.strokeCount = strokeCount;
         this.definitions = definitions;
     }
 
     public ChineseOrigin(
         String character,
         String unicode,
-        ArrayList<ChineseRadical> radicals,
         int strokeCount,
         ArrayList<String> definitions,
         Optional<ArrayList<LinguisticComparison>> comparisons,
@@ -48,8 +42,6 @@ public class ChineseOrigin {
     ) {
         this.character = character;
         this.unicode = unicode;
-        this.radicals = radicals;
-        this.strokeCount = strokeCount;
         this.definitions = definitions;
         this.comparisons = comparisons;
         this.simplified = simplified;
@@ -81,22 +73,6 @@ public class ChineseOrigin {
 
     public void setUnicode(String newUnicode) {
         this.unicode = newUnicode;
-    }
-
-    public ArrayList<ChineseRadical> getRadicals() {
-        return this.radicals;
-    }
-
-    public void setRadicals(ArrayList<ChineseRadical> newRadicals) {
-        this.radicals = newRadicals;
-    }
-
-    public int getStrokeCount() {
-        return this.strokeCount;
-    }
-
-    public void setStrokeCount(int newStrokeCount) {
-        this.strokeCount = newStrokeCount;
     }
 
     public ArrayList<String> getDefinitions() {
@@ -132,15 +108,12 @@ public class ChineseOrigin {
             [
                 Character=%s
                 Unicode=%s
-                Radicals=%s
-                Stroke count=%d
                 Definitions=%s
                 Comparisons=%s
                 Simplified=%b
             ]
             """,
-            character, unicode, radicals.toString(), 
-            strokeCount, definitions.toString(),
+            character, unicode, definitions.toString(),
             comparisons.orElse(new ArrayList<LinguisticComparison>()).toString(),
             simplified.orElse(null)
         );
