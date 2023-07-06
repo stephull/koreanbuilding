@@ -154,7 +154,7 @@ class DictionaryDefinition {
     }
 
     public String getContext() {
-        return this.context.orElse("");
+        return this.context.orElse("None");
     }
 
     public void setContext(Optional<String> newContext) {

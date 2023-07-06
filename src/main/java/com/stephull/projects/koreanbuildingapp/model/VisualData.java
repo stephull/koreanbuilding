@@ -46,7 +46,7 @@ public class VisualData {
     }
 
     public String getDescription() {
-        return this.description.orElse("");
+        return this.description.orElse("None");
     }
 
     public void setDescription(Optional<String> newDescription) {

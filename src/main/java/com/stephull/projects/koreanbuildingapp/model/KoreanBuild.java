@@ -16,15 +16,29 @@ public class KoreanBuild {
     private KoreanSpeech speech;
     private String build;
     private boolean complete;
-    private KoreanBuildSound sound;
-    private KoreanBuildStats stats;
-    private String unicode;
+
+    private Optional<KoreanBuildSound> sound;
+    private Optional<KoreanBuildStats> stats;
+    private Optional<String> unicode;
+
     private Optional<ArrayList<CustomID<KoreanBuild>>> consonants;
     private Optional<ArrayList<CustomID<KoreanBuild>>> vowels;
     private Optional<ArrayList<CustomID<KorEngDictionary>>> dictionary;
 
     public KoreanBuild() {}
     
+    // for demo purposes
+    public KoreanBuild(
+        KoreanSpeech speech,
+        String build,
+        boolean complete
+    ) {
+        this.speech = speech;
+        this.build = build;
+        this.complete = complete;
+    }
+
+    // normal constructor
     public KoreanBuild(
         KoreanSpeech speech,
         String build,
@@ -36,12 +50,12 @@ public class KoreanBuild {
         this.speech = speech;
         this.build = build;
         this.complete = complete;
-        this.sound = sound;
-        this.stats = stats;
-        this.unicode = unicode;
+        this.sound = Optional.ofNullable(sound);
+        this.stats = Optional.ofNullable(stats);
+        this.unicode = Optional.ofNullable(unicode);
     }
 
-    // with optional parameters
+    // with true-optional parameters
     public KoreanBuild(
         KoreanSpeech speech,
         String build,
@@ -49,19 +63,19 @@ public class KoreanBuild {
         KoreanBuildSound sound,
         KoreanBuildStats stats,
         String unicode,
-        Optional<ArrayList<CustomID<KoreanBuild>>> consonants,
-        Optional<ArrayList<CustomID<KoreanBuild>>> vowels,
-        Optional<ArrayList<CustomID<KorEngDictionary>>> dictionary
+        ArrayList<CustomID<KoreanBuild>> consonants,
+        ArrayList<CustomID<KoreanBuild>> vowels,
+        ArrayList<CustomID<KorEngDictionary>> dictionary
     ) {
         this.speech = speech;
         this.build = build;
         this.complete = complete;
-        this.sound = sound;
-        this.stats = stats;
-        this.unicode = unicode;
-        this.consonants = consonants;
-        this.vowels = vowels;
-        this.dictionary = dictionary;
+        this.sound = Optional.ofNullable(sound);
+        this.stats = Optional.ofNullable(stats);
+        this.unicode = Optional.ofNullable(unicode);
+        this.consonants = Optional.ofNullable(consonants);
+        this.vowels = Optional.ofNullable(vowels);
+        this.dictionary = Optional.ofNullable(dictionary);
     }
 
     public String getId() {
@@ -101,26 +115,26 @@ public class KoreanBuild {
     }
 
     public KoreanBuildSound getSound() {
-        return this.sound;
+        return this.sound.orElse(null);
     }
 
-    public void setSound(KoreanBuildSound newSound) {
+    public void setSound(Optional<KoreanBuildSound> newSound) {
         this.sound = newSound;
     }
 
     public KoreanBuildStats getStats() {
-        return this.stats;
+        return this.stats.orElse(null);
     }
 
-    public void setStats(KoreanBuildStats newStats) {
+    public void setStats(Optional<KoreanBuildStats> newStats) {
         this.stats = newStats;
     }
 
     public String getUnicode() {
-        return this.unicode;
+        return this.unicode.orElse("None");
     }
 
-    public void setUnicode(String newUnicode) {
+    public void setUnicode(Optional<String> newUnicode) {
         this.unicode = newUnicode;
     }
 
@@ -153,8 +167,8 @@ public class KoreanBuild {
                 Korean Build ID=%s
                 Speech=%s
                 Build=%s
-                Unicode=%s
                 Complete=%b
+                Unicode=%s
                 Sound=%s
                 Stats=%s
                 Consonants=%s
@@ -162,11 +176,16 @@ public class KoreanBuild {
                 Dictionary=%s
             ]       
             """,
-            id, kbid, speech, build, unicode, complete, 
-            sound.toString(), stats.toString(), 
-            consonants.orElse(new ArrayList<CustomID<KoreanBuild>>()).toString(),
-            vowels.orElse(new ArrayList<CustomID<KoreanBuild>>()).toString(),
-            dictionary.orElse(new ArrayList<CustomID<KorEngDictionary>>()).toString()
+            id, kbid, 
+            speech, 
+            build, 
+            complete,
+            unicode,
+            sound,
+            stats,
+            consonants,
+            vowels,
+            dictionary
         );
     }
 }

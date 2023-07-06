@@ -111,7 +111,7 @@ public class Profile {
     }
 
     public String getBiography() {
-        return this.biography.orElse("");
+        return this.biography.orElse("None");
     }
 
     public void setBiography(Optional<String> newBiography) {

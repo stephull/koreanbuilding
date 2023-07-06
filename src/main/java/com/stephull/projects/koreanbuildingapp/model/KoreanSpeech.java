@@ -13,16 +13,27 @@ public class KoreanSpeech {
 
     private CustomID<KoreanSpeech> ksid;
     private String letter;
-    private KoreanSpeechSound sound;
+    private String normalSound;
+    private Optional<String> endingSound;
 
-    public KoreanSpeech () {}
+    public KoreanSpeech() {}
 
-    public KoreanSpeech (
+    public KoreanSpeech(
         String letter,
-        KoreanSpeechSound sound
+        String normalSound
     ) {
         this.letter = letter;
-        this.sound = sound;
+        this.normalSound = normalSound;
+    }
+
+    public KoreanSpeech(
+        String letter,
+        String normalSound,
+        String endingSound
+    ) {
+        this.letter = letter;
+        this.normalSound = normalSound;
+        this.endingSound = Optional.ofNullable(endingSound);
     }
 
     public String getId() {
@@ -45,12 +56,20 @@ public class KoreanSpeech {
         this.letter = newLetter;
     }
 
-    public KoreanSpeechSound getSound() {
-        return this.sound;
+    public String getNormalSound() {
+        return this.normalSound;
     }
 
-    public void setSound(KoreanSpeechSound newSound) {
-        this.sound = newSound;
+    public void setNormalSound(String newNormalSound) {
+        this.normalSound = newNormalSound;
+    }
+
+    public String getEndingSound() {
+        return this.endingSound.orElse("None");
+    }
+
+    public void setEndingSound(Optional<String> newEndingSound) {
+        this.endingSound = newEndingSound;
     }
 
     @Override
@@ -59,62 +78,11 @@ public class KoreanSpeech {
             """
             [
                 Letter=%s
-                Sound=%s
-            ]
-            """,
-            letter, sound.toString()
-        );
-    }
-
-}
-
-class KoreanSpeechSound {
-
-    private String normal;
-    private Optional<String> ending;
-
-    public KoreanSpeechSound() {}
-
-    public KoreanSpeechSound(
-        String normal
-    ) {
-        this.normal = normal;
-    }
-
-    public KoreanSpeechSound(
-        String normal,
-        Optional<String> ending
-    ) {
-        this.normal = normal;
-        this.ending = ending;
-    }
-
-    public String getNormalSound() {
-        return this.normal;
-    }
-
-    public void setNormalSound(String newNormal) {
-        this.normal = newNormal;
-    }
-
-    public String getEndingSound() {
-        return this.ending.orElse("");
-    }
-
-    public void setEndingSound(Optional<String> newEnding) {
-        this.ending = newEnding;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-            """
-            [
                 Normal sound=%s
                 Ending sound=%s
             ]
             """,
-            normal, ending.orElse("None")
+            letter, normalSound, endingSound
         );
     }
 
