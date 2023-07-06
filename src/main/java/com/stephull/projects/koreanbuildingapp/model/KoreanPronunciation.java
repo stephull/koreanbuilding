@@ -11,7 +11,7 @@ public class KoreanPronunciation {
     @Id
     private String id;
 
-    private KPID kpid;
+    private CustomID<KoreanPronunciation> kpid;
     private String type;
     private KoreanPronunciationProperty additional;
     private Optional<KoreanPronunciationProperty> replacement;

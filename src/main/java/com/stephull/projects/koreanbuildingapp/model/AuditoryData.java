@@ -4,28 +4,28 @@ import java.io.File;
 
 public class AuditoryData {
     
-    private File soundFile;
+    private File file;
     private boolean completeSentence;
     private String source;
 
     public AuditoryData() {}
 
     public AuditoryData(
-        File soundFile,
+        File file,
         boolean completeSentence,
         String source
     ) {
-        this.soundFile = soundFile;
+        this.file = file;
         this.completeSentence = completeSentence;
         this.source = source;
     }
 
-    public File getSoundFile() {
-        return this.soundFile;
+    public File getFile() {
+        return this.file;
     }
 
-    public void setSoundFile(File newFile) {
-        this.soundFile = newFile;
+    public void setFile(File newFile) {
+        this.file = newFile;
     }
 
     public boolean getCompleteSentenceStatus() {
@@ -54,7 +54,7 @@ public class AuditoryData {
                 Source=%s
             ] 
             """,
-            soundFile.getAbsolutePath(), completeSentence, source
+            file.getAbsolutePath(), completeSentence, source
         );
     }
 

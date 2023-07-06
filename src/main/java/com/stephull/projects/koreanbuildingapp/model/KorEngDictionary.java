@@ -15,8 +15,9 @@ public class KorEngDictionary {
     @Id
     private String id;
 
-    private KEDID kedid;
+    private CustomID<KorEngDictionary> kedid;
     private String entry;
+    private ArrayList<CustomID<KoreanBuild>> associatedBuilds;
     private ArrayList<DictionaryDefinition> definitions;
     private AuditoryData sound;
     private Optional<VisualData> image;
@@ -25,21 +26,25 @@ public class KorEngDictionary {
 
     public KorEngDictionary(
         String entry,
+        ArrayList<CustomID<KoreanBuild>> associatedBuilds,
         ArrayList<DictionaryDefinition> definitions,
         AuditoryData sound
     ) {
         this.entry = entry;
+        this.associatedBuilds = associatedBuilds;
         this.definitions = definitions;
         this.sound = sound;
     }
 
     public KorEngDictionary(
         String entry,
+        ArrayList<CustomID<KoreanBuild>> associatedBuilds,
         ArrayList<DictionaryDefinition> definitions,
         AuditoryData sound,
         Optional<VisualData> image
     ) {
         this.entry = entry;
+        this.associatedBuilds = associatedBuilds;
         this.definitions = definitions;
         this.sound = sound;
         this.image = image;
@@ -63,6 +68,14 @@ public class KorEngDictionary {
 
     public void setEntry(String newEntry) {
         this.entry = newEntry;
+    }
+
+    public ArrayList<CustomID<KoreanBuild>> getAssociatedBuilds() {
+        return this.associatedBuilds;
+    }
+
+    public void setAssociatedBuilds(ArrayList<CustomID<KoreanBuild>> newAssociatedBuilds) {
+        this.associatedBuilds = newAssociatedBuilds;
     }
 
     public ArrayList<DictionaryDefinition> getDefinitions() {
@@ -111,10 +124,10 @@ public class KorEngDictionary {
 class DictionaryDefinition {
 
     private String translation;
-    private String entryType;    // noun, verb, adverb, etc.
+    private DictionaryEntryType entryType;    // noun, verb, adverb, etc.
     private String meaning;
     private Optional<String> context;   // a.k.a examples
-    private Optional<LinkedHashMap<ChineseOrigin, KoreanBuild>> hanja;
+    private Optional<LinkedHashMap<KoreanBuild, ChineseOrigin>> hanja;
 
     public String getTranslation() {
         return this.translation;
@@ -124,11 +137,11 @@ class DictionaryDefinition {
         this.translation = newTranslation;
     }
 
-    public String getEntryType() {
+    public DictionaryEntryType getEntryType() {
         return this.entryType;
     }
 
-    public void setEntryType(String newEntryType) {
+    public void setEntryType(DictionaryEntryType newEntryType) {
         this.entryType = newEntryType;
     }
 
@@ -148,12 +161,12 @@ class DictionaryDefinition {
         this.context = newContext;
     }
 
-    public LinkedHashMap<ChineseOrigin, KoreanBuild> getHanja() {
-        return this.hanja.orElse(new LinkedHashMap<ChineseOrigin, KoreanBuild>());
+    public LinkedHashMap<KoreanBuild, ChineseOrigin> getHanja() {
+        return this.hanja.orElse(new LinkedHashMap<KoreanBuild, ChineseOrigin>());
     }
 
     public void setHanja(
-        Optional<LinkedHashMap<ChineseOrigin, KoreanBuild>> newHanja
+        Optional<LinkedHashMap<KoreanBuild, ChineseOrigin>> newHanja
     ) {
         this.hanja = newHanja;
     }
@@ -171,7 +184,7 @@ class DictionaryDefinition {
             ]
             """,
             translation, entryType, meaning, context.orElse("None"),
-            hanja.orElse(new LinkedHashMap<ChineseOrigin, KoreanBuild>()).toString()
+            hanja.orElse(new LinkedHashMap<KoreanBuild, ChineseOrigin>()).toString()
         );
     }
 

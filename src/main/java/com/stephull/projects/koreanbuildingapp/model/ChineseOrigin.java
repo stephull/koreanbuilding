@@ -12,10 +12,10 @@ public class ChineseOrigin {
     @Id
     private String id;
 
-    private COID coid;
+    private CustomID<ChineseOrigin> coid;
     private String character;
     private String unicode;
-    private ArrayList<Radical> radicals;
+    private ArrayList<ChineseRadical> radicals;
     private int strokeCount;
     private ArrayList<String> definitions;
     private Optional<ArrayList<LinguisticComparison>> comparisons;
@@ -26,7 +26,7 @@ public class ChineseOrigin {
     public ChineseOrigin(
         String character,
         String unicode,
-        ArrayList<Radical> radicals,
+        ArrayList<ChineseRadical> radicals,
         int strokeCount,
         ArrayList<String> definitions
     ) {
@@ -40,7 +40,7 @@ public class ChineseOrigin {
     public ChineseOrigin(
         String character,
         String unicode,
-        ArrayList<Radical> radicals,
+        ArrayList<ChineseRadical> radicals,
         int strokeCount,
         ArrayList<String> definitions,
         Optional<ArrayList<LinguisticComparison>> comparisons,
@@ -83,11 +83,11 @@ public class ChineseOrigin {
         this.unicode = newUnicode;
     }
 
-    public ArrayList<Radical> getRadicals() {
+    public ArrayList<ChineseRadical> getRadicals() {
         return this.radicals;
     }
 
-    public void setRadicals(ArrayList<Radical> newRadicals) {
+    public void setRadicals(ArrayList<ChineseRadical> newRadicals) {
         this.radicals = newRadicals;
     }
 
@@ -143,72 +143,6 @@ public class ChineseOrigin {
             strokeCount, definitions.toString(),
             comparisons.orElse(new ArrayList<LinguisticComparison>()).toString(),
             simplified.orElse(null)
-        );
-    }
-
-}
-
-class Radical {
-
-    private String radical;
-    private String unicode;
-    private Optional<String> basic;
-
-    public Radical() {}
-
-    public Radical(
-        String radical,
-        String unicode
-    ) {
-        this.radical = radical;
-        this.unicode = unicode;
-    }
-
-    public Radical(
-        String radical,
-        String unicode,
-        Optional<String> basic
-    ) {
-        this.radical = radical;
-        this.unicode = unicode;
-        this.basic = basic;
-    }
-
-    public String getRadical() {
-        return this.radical;
-    }
-
-    public void setRadical(String newRadical) {
-        this.radical = newRadical;
-    }
-
-    public String getUnicode() {
-        return this.unicode;
-    }
-
-    public void setUnicode(String newUnicode) {
-        this.unicode = newUnicode;
-    }
-
-    public String getBasic() {
-        return this.basic.orElse("");
-    }
-
-    public void setBasic(Optional<String> newBasic) {
-        this.basic = newBasic;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-            """
-            [
-                Radical=%s
-                Unicode=%s
-                Basic form=%s
-            ]
-            """,
-            radical, unicode, basic.orElse("None")
         );
     }
 

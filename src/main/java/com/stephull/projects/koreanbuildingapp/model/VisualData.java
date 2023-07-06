@@ -5,36 +5,36 @@ import java.util.Optional;
 
 public class VisualData {
     
-    private File imageFile;
+    private File file;
     private String source;
     private Optional<String> description;
 
     public VisualData() {}
 
     public VisualData(
-        File imageFile,
+        File file,
         String source
     ) {
-        this.imageFile = imageFile;
+        this.file = file;
         this.source = source;
     }
 
     public VisualData(
-        File imageFile,
+        File file,
         String source,
         Optional<String> description
     ) {
-        this.imageFile = imageFile;
+        this.file = file;
         this.source = source;
         this.description = description;
     }
 
-    public File getImageFile() {
-        return this.imageFile;
+    public File getFile() {
+        return this.file;
     }
 
-    public void setImageFile(File newFile) {
-        this.imageFile = newFile;
+    public void setFile(File newFile) {
+        this.file = newFile;
     }
 
     public String getSource() {
@@ -63,7 +63,7 @@ public class VisualData {
                 Description=%s
             ]     
             """,
-            imageFile.getAbsolutePath(), source,
+            file.getAbsolutePath(), source,
             description.orElse("None")
         );
     }

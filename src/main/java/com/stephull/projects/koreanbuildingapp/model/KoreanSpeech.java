@@ -11,7 +11,7 @@ public class KoreanSpeech {
     @Id
     private String id;
 
-    private KSID ksid;
+    private CustomID<KoreanSpeech> ksid;
     private String letter;
     private KoreanSpeechSound sound;
 

@@ -12,15 +12,16 @@ public class KoreanBuild {
     @Id
     private String id;
 
-    private KBID kbid;
+    private CustomID<KoreanBuild> kbid;
     private KoreanSpeech speech;
     private String build;
     private boolean complete;
     private KoreanBuildSound sound;
     private KoreanBuildStats stats;
     private String unicode;
-    private Optional<ArrayList<KBID>> consonants;
-    private Optional<ArrayList<KBID>> vowels;
+    private Optional<ArrayList<CustomID<KoreanBuild>>> consonants;
+    private Optional<ArrayList<CustomID<KoreanBuild>>> vowels;
+    private Optional<ArrayList<CustomID<KorEngDictionary>>> dictionary;
 
     public KoreanBuild() {}
     
@@ -48,8 +49,9 @@ public class KoreanBuild {
         KoreanBuildSound sound,
         KoreanBuildStats stats,
         String unicode,
-        Optional<ArrayList<KBID>> consonants,
-        Optional<ArrayList<KBID>> vowels
+        Optional<ArrayList<CustomID<KoreanBuild>>> consonants,
+        Optional<ArrayList<CustomID<KoreanBuild>>> vowels,
+        Optional<ArrayList<CustomID<KorEngDictionary>>> dictionary
     ) {
         this.speech = speech;
         this.build = build;
@@ -59,6 +61,7 @@ public class KoreanBuild {
         this.unicode = unicode;
         this.consonants = consonants;
         this.vowels = vowels;
+        this.dictionary = dictionary;
     }
 
     public String getId() {
@@ -121,20 +124,24 @@ public class KoreanBuild {
         this.unicode = newUnicode;
     }
 
-    public ArrayList<KBID> getConsonants() {
-        return this.consonants.orElse(new ArrayList<KBID>());
+    public ArrayList<CustomID<KoreanBuild>> getConsonants() {
+        return this.consonants.orElse(new ArrayList<CustomID<KoreanBuild>>());
     }
 
-    public void setConsonants(Optional<ArrayList<KBID>> newConsonants) {
+    public void setConsonants(Optional<ArrayList<CustomID<KoreanBuild>>> newConsonants) {
         this.consonants = newConsonants;
     }
 
-    public ArrayList<KBID> getVowels() {
-        return this.vowels.orElse(new ArrayList<KBID>());
+    public ArrayList<CustomID<KoreanBuild>> getVowels() {
+        return this.vowels.orElse(new ArrayList<CustomID<KoreanBuild>>());
     }
 
-    public void setVowels(Optional<ArrayList<KBID>> newVowels) {
+    public void setVowels(Optional<ArrayList<CustomID<KoreanBuild>>> newVowels) {
         this.vowels = newVowels;
+    }
+
+    public ArrayList<CustomID<KorEngDictionary>> getDictionary() {
+        return this.dictionary.orElse(new ArrayList<CustomID<KorEngDictionary>>());
     }
 
     @Override
@@ -152,12 +159,14 @@ public class KoreanBuild {
                 Stats=%s
                 Consonants=%s
                 Vowels=%s
+                Dictionary=%s
             ]       
             """,
             id, kbid, speech, build, unicode, complete, 
             sound.toString(), stats.toString(), 
-            consonants.orElse(new ArrayList<KBID>()).toString(),
-            vowels.orElse(new ArrayList<KBID>()).toString()
+            consonants.orElse(new ArrayList<CustomID<KoreanBuild>>()).toString(),
+            vowels.orElse(new ArrayList<CustomID<KoreanBuild>>()).toString(),
+            dictionary.orElse(new ArrayList<CustomID<KorEngDictionary>>()).toString()
         );
     }
 }
