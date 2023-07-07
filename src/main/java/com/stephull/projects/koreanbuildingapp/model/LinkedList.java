@@ -170,17 +170,17 @@ class LinkedListDemo {
     public static void main(String[] args) {
         LinkedList<KoreanBuild> list = new LinkedList<KoreanBuild>();
 
-        KoreanSpeech ks1 = new KoreanSpeech("ㅇ", "x", "ng");
+        KoreanSpeech ks1 = new KoreanSpeech(EndConst.CONST_END_NG, "w", "ng");
         KoreanBuild kb1 = new KoreanBuild(
             ks1, "강", true
         );
 
-        KoreanSpeech ks2 = new KoreanSpeech("ㄴ", "n");
+        KoreanSpeech ks2 = new KoreanSpeech(EndConst.CONST_END_N, "n");
         KoreanBuild kb2 = new KoreanBuild(
             ks2, "원", true
         );
 
-        KoreanSpeech ks3 = new KoreanSpeech("ㅗ", "oh");
+        KoreanSpeech ks3 = new KoreanSpeech(Vowel.VOWEL_OH, "oh");
         KoreanBuild kb3 = new KoreanBuild(
             ks3, "도", true
         );
@@ -189,7 +189,6 @@ class LinkedListDemo {
         list.add(kb2);
         list.add(kb3);
         
-        String ret = list.toString();
-        System.out.println("FINAL LINKED LIST: " + ret.indent(2));
+        System.out.println("FINAL LINKED LIST: " + list.toString());
     }
 }

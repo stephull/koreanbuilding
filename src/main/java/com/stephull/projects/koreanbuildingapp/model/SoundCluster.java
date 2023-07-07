@@ -2,96 +2,162 @@ package com.stephull.projects.koreanbuildingapp.model;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
-public class SoundCluster {
+public abstract class SoundCluster<T extends Jamo<?>> {
     
-    private Map<String, String> vowelSoundClusters;
-    private Map<String, String> ordinaryConsonantSoundClusters;
-    private Map<String, String> endingConsonantSoundClusters;
+    private Map<T, String> cluster;
 
     public SoundCluster() {
-        vowelSoundClusters = new HashMap<String, String>();
-        ordinaryConsonantSoundClusters = new HashMap<String, String>();
-        endingConsonantSoundClusters = new HashMap<String, String>();
+        cluster = new HashMap<T, String>();
+        generate();
     }
 
-    // for vowels (all)
+    protected abstract JamoIterator<T> getIterator();
 
-    public void addVowelMapping(String character, String sound) {
-        vowelSoundClusters.put(character, sound);
+    protected void generate() {
+        JamoIterator<T> iterator = getIterator();
+        while (iterator.hasNext()) {
+            T type = iterator.next();
+            String sound = iterator.getSound();
+            cluster.put(type, sound);
+            System.out.println("Key: " + type + "\nValue: " + cluster.get(type) + "\n");
+        }
     }
 
-    public String getVowelSoundValue(String character) {
-        return vowelSoundClusters.get(character);
+    public void addMapping(T type, String sound) {
+        cluster.put(type, sound);
     }
 
-    public boolean containsVowelCharacter(String character) {
-        return vowelSoundClusters.containsKey(character);
+    public String getSoundValue(T type) {
+        return cluster.get(type);
     }
 
-    public void removeVowelMapping(String character) {
-        vowelSoundClusters.remove(character);
+    public boolean containsType(T type) {
+        return cluster.containsKey(type);
     }
 
-    // for ordinary consonants
-
-    public void addOrdinaryConsonantMapping(String character, String sound) {
-        ordinaryConsonantSoundClusters.put(character, sound);
+    public void removeMapping(T type) {
+        cluster.remove(type);
     }
 
-    public String getOrdinaryConsonantSoundValue(String character) {
-        return ordinaryConsonantSoundClusters.get(character);
+}
+
+class VowelCluster extends SoundCluster<Vowel> {
+
+    public VowelCluster() {
+        super();
     }
 
-    public boolean containsOrdinaryConsonantCharacter(String character) {
-        return ordinaryConsonantSoundClusters.containsKey(character);
+    @Override
+    protected JamoIterator<Vowel> getIterator() {
+        return new VowelIterator();
     }
 
-    public void removeOrdinaryConsonantMapping(String character) {
-        ordinaryConsonantSoundClusters.remove(character);
+    private class VowelIterator implements JamoIterator<Vowel> {
+        private int currentIndex;
+        private List<Vowel> vowels;
+
+        public VowelIterator() {
+            currentIndex = 0;
+            vowels = Vowel.getAllVowels();
+        }
+
+        public boolean hasNext() {
+            return currentIndex < vowels.size();
+        }
+
+        public Vowel next() {
+            Vowel v = vowels.get(currentIndex++);
+            return v;
+        }
+
+        public String getSound() {
+            Vowel v = vowels.get(currentIndex - 1);
+            return v.getValue();
+        }
     }
 
-    // and for ending consonants
+}
 
-    public void addEndingConsonantMapping(String character, String sound) {
-        endingConsonantSoundClusters.put(character, sound);
+class ConstCluster extends SoundCluster<Const> {
+
+    public ConstCluster() {
+        super();
     }
 
-    public String getEndingConsonantSoundValue(String character) {
-        return endingConsonantSoundClusters.get(character);
+    @Override
+    protected JamoIterator<Const> getIterator() {
+        return new ConstIterator();
     }
 
-    public boolean containsEndingConsonantCharacter(String character) {
-        return endingConsonantSoundClusters.containsKey(character);
+    private class ConstIterator implements JamoIterator<Const> {
+        private int currentIndex;
+        private List<Const> consts;
+
+        public ConstIterator() {
+            currentIndex = 0;
+            consts = Const.getAllConsonants();
+        }
+
+        public boolean hasNext() {
+            return currentIndex < consts.size();
+        }
+
+        public Const next() {
+            Const c = consts.get(currentIndex++);
+            return c;
+        }
+
+        public String getSound() {
+            Const c = consts.get(currentIndex - 1);
+            return c.getValue();
+        }
     }
 
-    public void removeEndingConsonantMapping(String character) {
-        endingConsonantSoundClusters.remove(character);
+}
+
+class EndConstCluster extends SoundCluster<EndConst> {
+
+    public EndConstCluster() {
+        super();
+    }
+
+    @Override
+    protected JamoIterator<EndConst> getIterator() {
+        return new EndConstIterator();
+    }
+
+    private class EndConstIterator implements JamoIterator<EndConst> {
+        private int currentIndex;
+        private List<EndConst> consts;
+
+        public EndConstIterator() {
+            currentIndex = 0;
+            consts = EndConst.getAllEndingConsonants();
+        }
+
+        public boolean hasNext() {
+            return currentIndex < consts.size();
+        }
+
+        public EndConst next() {
+            EndConst c = consts.get(currentIndex++);
+            return c;
+        }
+
+        public String getSound() {
+            EndConst c = consts.get(currentIndex - 1);
+            return c.getValue();
+        }
     }
 
 }
 
 class SoundClusterDemo {
     public static void main(String[] args) {
-        SoundCluster sc = new SoundCluster();
-
-        sc.addVowelMapping(Jamo.AH, "ah");
-        sc.addVowelMapping(Jamo.EE, "ee");
-        
-        sc.addOrdinaryConsonantMapping(Jamo.B, "b");
-        sc.addOrdinaryConsonantMapping(Jamo.W, "w");
-
-        sc.addEndingConsonantMapping(Jamo.B, "p");
-        sc.addEndingConsonantMapping(Jamo.W, "ng");
-
-        System.out.println("Vowels:");
-        System.out.println(sc.getVowelSoundValue(Jamo.AH));
-        System.out.println(sc.getVowelSoundValue(Jamo.EE));
-
-        System.out.println("\nOrdinary consonants:");
-        System.out.println(sc.getOrdinaryConsonantSoundValue(Jamo.B));
-
-        System.out.println("\nEnding consonants:");
-        System.out.println(sc.getEndingConsonantSoundValue(Jamo.W));
+        new VowelCluster();   
+        new ConstCluster();
+        new EndConstCluster();     
     }
 }

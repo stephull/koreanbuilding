@@ -12,14 +12,14 @@ public class KoreanSpeech {
     private String id;
 
     private CustomID<KoreanSpeech> ksid;
-    private String letter;
+    private Jamo<?> letter;
     private String normalSound;
     private Optional<String> endingSound;
 
     public KoreanSpeech() {}
 
     public KoreanSpeech(
-        String letter,
+        Jamo<?> letter,
         String normalSound
     ) {
         this.letter = letter;
@@ -27,7 +27,7 @@ public class KoreanSpeech {
     }
 
     public KoreanSpeech(
-        String letter,
+        Jamo<?> letter,
         String normalSound,
         String endingSound
     ) {
@@ -49,11 +49,11 @@ public class KoreanSpeech {
     }
 
     public String getLetter() {
-        return this.letter;
+        return this.letter.getValue();
     }
 
     public void setLetter(String newLetter) {
-        this.letter = newLetter;
+        this.letter.setValue(newLetter);
     }
 
     public String getNormalSound() {
