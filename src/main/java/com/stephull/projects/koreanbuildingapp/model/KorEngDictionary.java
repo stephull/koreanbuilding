@@ -124,7 +124,7 @@ public class KorEngDictionary {
 class DictionaryDefinition {
 
     private String translation;
-    private DictionaryEntryType entryType;    // noun, verb, adverb, etc.
+    private WordType entryType;    // noun, verb, adverb, etc.
     private String meaning;
     private Optional<String> context;   // a.k.a examples
     private Optional<LinkedHashMap<KoreanBuild, ChineseOrigin>> hanja;
@@ -137,11 +137,11 @@ class DictionaryDefinition {
         this.translation = newTranslation;
     }
 
-    public DictionaryEntryType getEntryType() {
+    public WordType getEntryType() {
         return this.entryType;
     }
 
-    public void setEntryType(DictionaryEntryType newEntryType) {
+    public void setEntryType(WordType newEntryType) {
         this.entryType = newEntryType;
     }
 

@@ -12,29 +12,35 @@ public class KoreanPronunciation {
     private String id;
 
     private CustomID<KoreanPronunciation> kpid;
-    private String type;
-    private KoreanPronunciationProperty additional;
-    private Optional<KoreanPronunciationProperty> replacement;
-    private Optional<KoreanPronunciationProperty> combination;
+    private PronunciationType type;
+    private Optional<KPProperty> additional;
+    private Optional<KPProperty> replacement;
+    private Optional<KPProperty> combination;
 
     public KoreanPronunciation() {}
 
     public KoreanPronunciation(
-        String type,
-        KoreanPronunciationProperty additional
+        PronunciationType type
     ) {
         this.type = type;
-        this.additional = additional;
     }
 
     public KoreanPronunciation(
-        String type,
-        KoreanPronunciationProperty additional,
-        KoreanPronunciationProperty replacement,
-        KoreanPronunciationProperty combination
+        PronunciationType type,
+        KPProperty additional
     ) {
         this.type = type;
-        this.additional = additional;
+        this.additional = Optional.ofNullable(additional);
+    }
+
+    public KoreanPronunciation(
+        PronunciationType type,
+        KPProperty additional,
+        KPProperty replacement,
+        KPProperty combination
+    ) {
+        this.type = type;
+        this.additional = Optional.ofNullable(additional);
         this.replacement = Optional.ofNullable(replacement);
         this.combination = Optional.ofNullable(combination);
     }
@@ -51,35 +57,35 @@ public class KoreanPronunciation {
         this.kpid.setCustomID(newKpId);
     }
 
-    public String getType() {
+    public PronunciationType getType() {
         return this.type;
     }
 
-    public void setType(String newType) {
+    public void setType(PronunciationType newType) {
         this.type = newType;
     }
 
-    public KoreanPronunciationProperty getAdditional() {
-        return this.additional;
+    public KPProperty getAdditional() {
+        return this.additional.orElse(null);
     }
 
-    public void setAdditional(KoreanPronunciationProperty newAdditional) {
+    public void setAdditional(Optional<KPProperty> newAdditional) {
         this.additional = newAdditional;
     }
 
-    public KoreanPronunciationProperty getReplacement() {
+    public KPProperty getReplacement() {
         return this.replacement.orElse(null);
     }
 
-    public void setReplacement(Optional<KoreanPronunciationProperty> newReplacement) {
+    public void setReplacement(Optional<KPProperty> newReplacement) {
         this.replacement = newReplacement;
     }
 
-    public KoreanPronunciationProperty getCombination() {
+    public KPProperty getCombination() {
         return this.combination.orElse(null);
     }
 
-    public void setCombination(Optional<KoreanPronunciationProperty> newCombination) {
+    public void setCombination(Optional<KPProperty> newCombination) {
         this.combination = newCombination;
     }
 
@@ -100,14 +106,14 @@ public class KoreanPronunciation {
     }
 }
 
-class KoreanPronunciationProperty {
+class KPProperty {
 
     private String character;
     private String sound;
 
-    public KoreanPronunciationProperty() {}
+    public KPProperty() {}
 
-    public KoreanPronunciationProperty(
+    public KPProperty(
         String character,
         String sound
     ) {
