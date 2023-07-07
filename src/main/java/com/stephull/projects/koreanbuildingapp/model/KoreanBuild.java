@@ -3,6 +3,7 @@ package com.stephull.projects.koreanbuildingapp.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -13,69 +14,69 @@ public class KoreanBuild {
     private String id;
 
     private CustomID<KoreanBuild> kbid;
-    private KoreanSpeech speech;
+    private KoreanSpeechCluster base;
     private String build;
     private boolean complete;
+    private String unicode;
 
     private Optional<KoreanBuildSound> sound;
     private Optional<KoreanBuildStats> stats;
-    private Optional<String> unicode;
 
-    private Optional<ArrayList<CustomID<KoreanBuild>>> consonants;
-    private Optional<ArrayList<CustomID<KoreanBuild>>> vowels;
-    private Optional<ArrayList<CustomID<KorEngDictionary>>> dictionary;
+    private Optional<List<CustomID<KoreanBuild>>> consonants;
+    private Optional<List<CustomID<KoreanBuild>>> vowels;
 
     public KoreanBuild() {}
     
     // for demo purposes
     public KoreanBuild(
-        KoreanSpeech speech,
+        KoreanSpeechCluster base,
         String build,
-        boolean complete
+        boolean complete,
+        String unicode
     ) {
-        this.speech = speech;
+        this.base = base;
         this.build = build;
         this.complete = complete;
+        this.unicode = unicode;
     }
 
     // normal constructor
     public KoreanBuild(
-        KoreanSpeech speech,
+        KoreanSpeechCluster base,
         String build,
         boolean complete,
+        String unicode,
         KoreanBuildSound sound,
-        KoreanBuildStats stats,
-        String unicode
+        KoreanBuildStats stats
     ) {
-        this.speech = speech;
+        this.base = base;
         this.build = build;
         this.complete = complete;
+        this.unicode = unicode;
         this.sound = Optional.ofNullable(sound);
         this.stats = Optional.ofNullable(stats);
-        this.unicode = Optional.ofNullable(unicode);
     }
 
     // with true-optional parameters
     public KoreanBuild(
-        KoreanSpeech speech,
+        KoreanSpeechCluster base,
         String build,
         boolean complete,
         KoreanBuildSound sound,
         KoreanBuildStats stats,
         String unicode,
-        ArrayList<CustomID<KoreanBuild>> consonants,
-        ArrayList<CustomID<KoreanBuild>> vowels,
-        ArrayList<CustomID<KorEngDictionary>> dictionary
+        List<CustomID<KoreanBuild>> consonants,
+        List<CustomID<KoreanBuild>> vowels,
+        List<CustomID<KorEngDictionary>> dictionary
     ) {
-        this.speech = speech;
+        this.base = base;
         this.build = build;
         this.complete = complete;
+        this.unicode = unicode;
         this.sound = Optional.ofNullable(sound);
         this.stats = Optional.ofNullable(stats);
-        this.unicode = Optional.ofNullable(unicode);
         this.consonants = Optional.ofNullable(consonants);
         this.vowels = Optional.ofNullable(vowels);
-        this.dictionary = Optional.ofNullable(dictionary);
     }
 
     public String getId() {
@@ -90,12 +91,12 @@ public class KoreanBuild {
         this.kbid.setCustomID(newKbId);
     }
 
-    public KoreanSpeech getSpeech() {
-        return this.speech;
+    public KoreanSpeechCluster getBase() {
+        return this.base;
     }
 
-    public void setSpeech(KoreanSpeech newSpeech) {
-        this.speech = newSpeech;
+    public void setBase(KoreanSpeechCluster newBase) {
+        this.base = newBase;
     }
 
     public String getBuild() {
@@ -114,6 +115,14 @@ public class KoreanBuild {
         this.complete = newCompleteStatus;
     }
 
+    public String getUnicode() {
+        return this.unicode;
+    }
+
+    public void setUnicode(String newUnicode) {
+        this.unicode = newUnicode;
+    }
+
     public KoreanBuildSound getSound() {
         return this.sound.orElse(null);
     }
@@ -130,32 +139,20 @@ public class KoreanBuild {
         this.stats = newStats;
     }
 
-    public String getUnicode() {
-        return this.unicode.orElse("None");
-    }
-
-    public void setUnicode(Optional<String> newUnicode) {
-        this.unicode = newUnicode;
-    }
-
-    public ArrayList<CustomID<KoreanBuild>> getConsonants() {
+    public List<CustomID<KoreanBuild>> getConsonants() {
         return this.consonants.orElse(new ArrayList<CustomID<KoreanBuild>>());
     }
 
-    public void setConsonants(Optional<ArrayList<CustomID<KoreanBuild>>> newConsonants) {
+    public void setConsonants(Optional<List<CustomID<KoreanBuild>>> newConsonants) {
         this.consonants = newConsonants;
     }
 
-    public ArrayList<CustomID<KoreanBuild>> getVowels() {
+    public List<CustomID<KoreanBuild>> getVowels() {
         return this.vowels.orElse(new ArrayList<CustomID<KoreanBuild>>());
     }
 
-    public void setVowels(Optional<ArrayList<CustomID<KoreanBuild>>> newVowels) {
+    public void setVowels(Optional<List<CustomID<KoreanBuild>>> newVowels) {
         this.vowels = newVowels;
-    }
-
-    public ArrayList<CustomID<KorEngDictionary>> getDictionary() {
-        return this.dictionary.orElse(new ArrayList<CustomID<KorEngDictionary>>());
     }
 
     @Override
@@ -165,7 +162,7 @@ public class KoreanBuild {
             [
                 Official ID=%s
                 Korean Build ID=%s
-                Speech=%s
+                Assembly=%s
                 Build=%s
                 Complete=%b
                 Unicode=%s
@@ -173,19 +170,17 @@ public class KoreanBuild {
                 Stats=%s
                 Consonants=%s
                 Vowels=%s
-                Dictionary=%s
             ]       
             """,
             id, kbid, 
-            speech, 
+            base,
             build, 
             complete,
             unicode,
             sound,
             stats,
             consonants,
-            vowels,
-            dictionary
+            vowels
         );
         return ret.indent(2);
     }

@@ -126,14 +126,14 @@ public class ChineseOrigin {
 
 class LinguisticComparison {
 
-    private Language language;
+    private LanguageType language;
     private String context;
     private Optional<AuditoryData> sound;
 
     public LinguisticComparison() {}
 
     public LinguisticComparison(
-        Language language, 
+        LanguageType language, 
         String context
     ) {
         this.language = language;
@@ -141,7 +141,7 @@ class LinguisticComparison {
     }
 
     public LinguisticComparison(
-        Language language,
+        LanguageType language,
         String context,
         Optional<AuditoryData> sound
     ) {
@@ -150,11 +150,11 @@ class LinguisticComparison {
         this.sound = sound;
     }
 
-    public Language getLanguage() {
+    public LanguageType getLanguage() {
         return this.language;
     }
 
-    public void setLanguage(Language newLanguage) {
+    public void setLanguage(LanguageType newLanguage) {
         this.language = newLanguage;
     }
 
