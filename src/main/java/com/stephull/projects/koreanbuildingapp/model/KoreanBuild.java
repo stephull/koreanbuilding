@@ -1,14 +1,20 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@Document(collection="KoreanBuilds")
+@Document(collection = "KoreanBuilds")
 public class KoreanBuild {
+
+    @Autowired
+    private KBRepository kbrepo;
 
     @Id
     private String id;
@@ -16,67 +22,31 @@ public class KoreanBuild {
     private CustomID<KoreanBuild> kbid;
     private KoreanSpeechCluster base;
     private String build;
-    private boolean complete;
+
     private String unicode;
+    private KoreanBuildSound sound;
+    private KoreanBuildStats stats;
+    //private LinkedList<KoreanSpeechCluster> assembly;
 
-    private Optional<KoreanBuildSound> sound;
-    private Optional<KoreanBuildStats> stats;
-
-    private Optional<List<CustomID<KoreanBuild>>> consonants;
-    private Optional<List<CustomID<KoreanBuild>>> vowels;
+    private List<KoreanBuild> consonants;
+    private List<KoreanBuild> vowels;
 
     public KoreanBuild() {}
-    
-    // for demo purposes
+
+    // normal constructor
     public KoreanBuild(
-        KoreanSpeechCluster base,
         String build,
-        boolean complete,
+        KoreanSpeechCluster base,
         String unicode
     ) {
         this.base = base;
         this.build = build;
-        this.complete = complete;
         this.unicode = unicode;
-    }
-
-    // normal constructor
-    public KoreanBuild(
-        KoreanSpeechCluster base,
-        String build,
-        boolean complete,
-        String unicode,
-        KoreanBuildSound sound,
-        KoreanBuildStats stats
-    ) {
-        this.base = base;
-        this.build = build;
-        this.complete = complete;
-        this.unicode = unicode;
-        this.sound = Optional.ofNullable(sound);
-        this.stats = Optional.ofNullable(stats);
-    }
-
-    // with true-optional parameters
-    public KoreanBuild(
-        KoreanSpeechCluster base,
-        String build,
-        boolean complete,
-        KoreanBuildSound sound,
-        KoreanBuildStats stats,
-        String unicode,
-        List<CustomID<KoreanBuild>> consonants,
-        List<CustomID<KoreanBuild>> vowels,
-        List<CustomID<KorEngDictionary>> dictionary
-    ) {
-        this.base = base;
-        this.build = build;
-        this.complete = complete;
-        this.unicode = unicode;
-        this.sound = Optional.ofNullable(sound);
-        this.stats = Optional.ofNullable(stats);
-        this.consonants = Optional.ofNullable(consonants);
-        this.vowels = Optional.ofNullable(vowels);
+        this.sound = new KoreanBuildSound(build);
+        this.stats = new KoreanBuildStats(build);
+        //this.assembly = new LinkedList<KoreanSpeechCluster>(build);
+        this.consonants = kbrepo.findAllConsonantsByBuild(build);
+        this.vowels = kbrepo.findAllVowelsByBuild(build);
     }
 
     public String getId() {
@@ -107,14 +77,6 @@ public class KoreanBuild {
         this.build = newBuild;
     }
 
-    public boolean getCompleteStatus() {
-        return this.complete;
-    }
-
-    public void setCompleteStatus(boolean newCompleteStatus) {
-        this.complete = newCompleteStatus;
-    }
-
     public String getUnicode() {
         return this.unicode;
     }
@@ -124,34 +86,42 @@ public class KoreanBuild {
     }
 
     public KoreanBuildSound getSound() {
-        return this.sound.orElse(null);
+        return this.sound;
     }
 
-    public void setSound(Optional<KoreanBuildSound> newSound) {
+    public void setSound(KoreanBuildSound newSound) {
         this.sound = newSound;
     }
 
     public KoreanBuildStats getStats() {
-        return this.stats.orElse(null);
+        return this.stats;
     }
 
-    public void setStats(Optional<KoreanBuildStats> newStats) {
+    public void setStats(KoreanBuildStats newStats) {
         this.stats = newStats;
     }
 
-    public List<CustomID<KoreanBuild>> getConsonants() {
-        return this.consonants.orElse(new ArrayList<CustomID<KoreanBuild>>());
+    /*public LinkedList<KoreanSpeechCluster> getAssembly() {
+        return this.assembly;
     }
 
-    public void setConsonants(Optional<List<CustomID<KoreanBuild>>> newConsonants) {
+    public void setAssembly(LinkedList<KoreanSpeechCluster> newAssembly) {
+        this.assembly = newAssembly;
+    }*/
+
+    public List<KoreanBuild> getConsonants() {
+        return this.consonants;
+    }
+
+    public void setConsonants(List<KoreanBuild> newConsonants) {
         this.consonants = newConsonants;
     }
 
     public List<CustomID<KoreanBuild>> getVowels() {
-        return this.vowels.orElse(new ArrayList<CustomID<KoreanBuild>>());
+        return this.vowels;
     }
 
-    public void setVowels(Optional<List<CustomID<KoreanBuild>>> newVowels) {
+    public void setVowels(List<CustomID<KoreanBuild>> newVowels) {
         this.vowels = newVowels;
     }
 
@@ -162,153 +132,138 @@ public class KoreanBuild {
             [
                 Official ID=%s
                 Korean Build ID=%s
-                Assembly=%s
                 Build=%s
-                Complete=%b
                 Unicode=%s
                 Sound=%s
                 Stats=%s
                 Consonants=%s
                 Vowels=%s
-            ]       
+            ]
             """,
-            id, kbid, 
+            id, kbid,
             base,
-            build, 
-            complete,
+            build,
             unicode,
             sound,
             stats,
+            //assembly,
             consonants,
             vowels
         );
         return ret.indent(2);
     }
+
+    private class KoreanBuildSound {
+
+        private String key;
+        private boolean silent;
+        private boolean replace;
+        private Optional<KoreanPronunciation> pronunciation;
+
+        public KoreanBuildSound(String build) {
+            key = kbrepo.findSoundKeyByBuild(build);
+            
+            boolean[] special = kbrepo.findSpecialSingularPronunciationByBuild(build);
+            silent = special[0];
+            replace = special[1];
+
+            pronunciation = kbrepo.findPronunciationByBuild(build);
+        }
+
+        public String getKey() {
+            return this.key;
+        }
+
+        public void setKey(String newKey) {
+            this.key = newKey;
+        }
+
+        public boolean getSilentStatus() {
+            return this.silent;
+        }
+
+        public void setSilentStatus(boolean newSilentStatus) {
+            this.silent = newSilentStatus;
+        }
+
+        public boolean getReplaceStatus() {
+            return this.replace;
+        }
+
+        public void setReplaceStatus(boolean newReplaceStatus) {
+            this.replace = newReplaceStatus;
+        }
+
+        public KoreanPronunciation getPronunciation() {
+            return this.pronunciation.orElse(null);
+        }
+
+        public void setPronunciation(Optional<KoreanPronunciation> newPronunciation) {
+            this.pronunciation = newPronunciation;
+        }
+
+        @Override
+        public String toString() {
+            String ret = String.format(
+                """
+                [
+                    Key=%s
+                    Silent=%b
+                    Replace=%b
+                    Pronunciation=%s
+                ]
+                """,
+                key, silent, replace, pronunciation
+            );
+            return ret.indent(2);
+        }
+
+    }
+
+    private class KoreanBuildStats {
+
+        private double frequency;
+        private int appearences;
+
+        public KoreanBuildStats(String build) {
+            frequency = kbrepo.findAppearencesStatsByBuild(build);
+            appearences = kbrepo.findFrequencyStatsByBuild(build);
+        }
+
+        public double getFrequency() {
+            return this.frequency;
+        }
+
+        public void setFrequency(double newFrequency) {
+            this.frequency = newFrequency;
+        }
+
+        public int getAppearences() {
+            return this.appearences;
+        }
+
+        public void setAppearences(int newAppearences) {
+            this.appearences = newAppearences;
+        }
+
+        @Override
+        public String toString() {
+            String ret = String.format(
+                """
+                [
+                    Frequency=%d
+                    Appearences=%d
+                ]
+                """,
+                frequency, appearences
+            );
+            return ret.indent(2);
+        }
+    }
 }
 
-class KoreanBuildSound {
-
-    private String key;
-    private boolean silent;
-    private boolean replace;
-    private Optional<KoreanPronunciation> pronunciation;
-
-    public KoreanBuildSound() {}
-
-    public KoreanBuildSound(
-        String key,
-        boolean silent,
-        boolean replace
-    ) {
-        this.key = key;
-        this.silent = silent;
-        this.replace = replace;
-    }
-
-    public KoreanBuildSound(
-        String key,
-        boolean silent,
-        boolean replace,
-        KoreanPronunciation pronunciation
-    ) {
-        this.key = key;
-        this.silent = silent;
-        this.replace = replace;
-        this.pronunciation = Optional.ofNullable(pronunciation);
-    }
-
-    public String getKey() {
-        return this.key;
-    }
-
-    public void setKey(String newKey) {
-        this.key = newKey;
-    }
-
-    public boolean getSilentStatus() {
-        return this.silent;
-    }
-
-    public void setSilentStatus(boolean newSilentStatus) {
-        this.silent = newSilentStatus;
-    }
-
-    public boolean getReplaceStatus() {
-        return this.replace;
-    }
-
-    public void setReplaceStatus(boolean newReplaceStatus) {
-        this.replace = newReplaceStatus;
-    }
-
-    public KoreanPronunciation getPronunciation() {
-        return this.pronunciation.orElse(null);
-    }
-
-    public void setPronunciation(Optional<KoreanPronunciation> newPronunciation) {
-        this.pronunciation = newPronunciation;
-    }
-
-    @Override
-    public String toString() {
-        String ret = String.format(
-            """
-            [
-                Key=%s
-                Silent=%b
-                Replace=%b
-                Pronunciation=%s
-            ]        
-            """,
-            key, silent, replace, pronunciation
-        );
-        return ret.indent(2);
-    }
-
-}
-
-class KoreanBuildStats {
-
-    private double frequency;
-    private int appearences;
-
-    public KoreanBuildStats() {}
-
-    public KoreanBuildStats(
-        double frequency,
-        int appearences
-    ) {
-        this.frequency = frequency;
-        this.appearences = appearences;
-    }
-
-    public double getFrequency() {
-        return this.frequency;
-    }
-
-    public void setFrequency(double newFrequency) {
-        this.frequency = newFrequency;
-    }
-
-    public int getAppearences() {
-        return this.appearences;
-    }
-
-    public void setAppearences(int newAppearences) {
-        this.appearences = newAppearences;
-    }
-
-    @Override
-    public String toString() {
-        String ret = String.format(
-            """
-            [
-                Frequency=%d
-                Appearences=%d
-            ]  
-            """,
-            frequency, appearences
-        );
-        return ret.indent(2);
+class KoreanBuildDemo {
+    public static void main(String[] args) {
+        //KoreanBuild kb1 = new KoreanBuild(base1, "", "", kbsSound, kbsStats, assembly1);
     }
 }

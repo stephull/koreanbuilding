@@ -180,9 +180,9 @@ class LinkedListDemo {
             "ㄴ", "n", SpeechType.END_CONSONANT
         );
 
-        KoreanBuild kb1 = new KoreanBuild(base1, "한", true, "1234");
-        KoreanBuild kb2 = new KoreanBuild(base2, "라", true, "1234");
-        KoreanBuild kb3 = new KoreanBuild(base3, "산", true, "1234");
+        KoreanBuild kb1 = new KoreanBuild("한", base1, "1234");
+        KoreanBuild kb2 = new KoreanBuild("라", base2, "1234");
+        KoreanBuild kb3 = new KoreanBuild("산", base3, "1234");
 
         list.add(kb1);
         list.add(kb2);
