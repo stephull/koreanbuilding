@@ -170,19 +170,9 @@ class LinkedListDemo {
     public static void main(String[] args) {
         LinkedList<KoreanBuild> list = new LinkedList<KoreanBuild>();
 
-        KoreanSpeechCluster base1 = new KoreanSpeechCluster(
-            "ㄴ", "n", SpeechType.END_CONSONANT
-        );
-        KoreanSpeechCluster base2 = new KoreanSpeechCluster(
-            "ㅏ", "ah", SpeechType.VOWEL
-        );
-        KoreanSpeechCluster base3 = new KoreanSpeechCluster(
-            "ㄴ", "n", SpeechType.END_CONSONANT
-        );
-
-        KoreanBuild kb1 = new KoreanBuild("한", base1, "1234");
-        KoreanBuild kb2 = new KoreanBuild("라", base2, "1234");
-        KoreanBuild kb3 = new KoreanBuild("산", base3, "1234");
+        KoreanBuild kb1 = new KoreanBuild("한", "D55C");
+        KoreanBuild kb2 = new KoreanBuild("라", "B77C");
+        KoreanBuild kb3 = new KoreanBuild("봉", "BC29");
 
         list.add(kb1);
         list.add(kb2);

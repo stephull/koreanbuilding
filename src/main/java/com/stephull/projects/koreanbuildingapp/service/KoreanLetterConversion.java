@@ -1,10 +1,21 @@
 package com.stephull.projects.koreanbuildingapp.service;
 
+import com.stephull.projects.koreanbuildingapp.model.KoreanSpeechCluster;
+import com.stephull.projects.koreanbuildingapp.model.SpeechType;
+//import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class KoreanLetterConversion {
+
+	//@Autowired
+	//private KBRepository kbrepo;
     
     private static final int INIT_CONST_RANGE_START = 0x1100;
     private static final int INIT_CONST_RANGE_END = 0x1112;
@@ -17,12 +28,68 @@ public class KoreanLetterConversion {
     private static final int CONSONANT_INDEX = 28;
     private static final int VOWEL_INDEX = 21;
 
-    public static List<String> breakdownKoreanCharacter(char character) throws Exception {
+	/**
+	 * 
+	 * @param character
+	 * @return
+	 */
+	public List<KoreanSpeechCluster> convertCharacterToClusterArray(String character) {
+		return this.convertCharacterToClusterArray(character.charAt(0));
+	}
+
+	/**
+	 * 
+	 * @param character
+	 * @return
+	 */
+	public List<KoreanSpeechCluster> convertCharacterToClusterArray(char character) {
+		List<KoreanSpeechCluster> clusters = new ArrayList<KoreanSpeechCluster>();
+
+		List<String> sounds = this.convertCharacterToLetterArray(character);
+		for (String s : sounds) {
+			int soundCode = (int) s.charAt(0);
+
+			//String roman = kbrepo.findSoundRomanizationByLetter(s);
+
+			SpeechType st;
+			if (this.withinRange(soundCode, INIT_CONST_RANGE_START, INIT_CONST_RANGE_END)) {
+				st = SpeechType.CONSONANT;
+			} else if (this.withinRange(soundCode, VOWEL_RANGE_START, VOWEL_RANGE_END)) {
+				st = SpeechType.VOWEL;
+			} else if (this.withinRange(soundCode, FINAL_CONST_RANGE_START, FINAL_CONST_RANGE_END)) {
+				st = SpeechType.END_CONSONANT;
+			} else {
+				st = null;
+			}
+
+			KoreanSpeechCluster k = new KoreanSpeechCluster(s, "test", st);
+			clusters.add(k);
+		}
+
+		return clusters;
+	}
+
+	/**
+	 * 
+	 * @param character
+	 * @return
+	 */
+	public List<String> convertCharacterToLetterArray(String character) {
+		return this.convertCharacterToLetterArray(character.charAt(0));
+	}
+
+	/**
+	 * 
+	 * @param character
+	 * @return
+	 */
+    public List<String> convertCharacterToLetterArray(char character) {
         List<String> jamoCharacters = new ArrayList<String>();
 
         int charCode = (int) character;
         if (charCode < CHARACTER_RANGE_START || charCode > CHARACTER_RANGE_END) {
-            throw new Exception("Invalid input (need proper Korean character). Try again!");   
+            System.out.println("Invalid input (need proper Korean character). Try again!");
+			return jamoCharacters; 
         }        
         
         int syllableIndex = charCode - CHARACTER_RANGE_START;
@@ -130,10 +197,25 @@ public class KoreanLetterConversion {
         return jamoCharacters;
     }
     
-    public static String buildupKoreanCharacter(List<String> sounds) throws Exception {
+	/**
+	 * 
+	 * @param clusters
+	 * @return
+	 */
+	public String convertClusterArrayToCharacter(List<KoreanSpeechCluster> clusters) {
+		return "";
+	}
+
+	/**
+	 * 
+	 * @param sounds
+	 * @return
+	 */
+    public String convertLetterArrayToCharacter(List<String> sounds) {
 		int sLength = sounds.size();
 		if (sLength < 2) {
-		    throw new Exception ("Invalid input (need at least 2 elements in list). Try again!");
+		    System.out.println("Invalid input (need at least 2 elements in list). Try again!");
+			return "";
 		}
 		
 		List<Integer> unicodeValues = new ArrayList<>();
@@ -141,9 +223,11 @@ public class KoreanLetterConversion {
 		for (int i = 0; i < sLength; i++) {
 			String s = sounds.get(i);
 
-			int uni = convertToProperUnicode((int)s.charAt(0), i);
+			int parsed = (int) s.charAt(0);
+			int uni = this.convertToProperUnicode(parsed, i);
 			if (uni == -1) {
-			    throw new Exception("Invalid input (need list with proper Korean sounds). Try again!");
+			    System.out.println("Invalid input (need list with proper Korean sounds). Try again!");
+				return "";
 			}
 			
 			if (unicodeValues.size() == 0) {
@@ -186,11 +270,24 @@ public class KoreanLetterConversion {
 		return Character.toString(temp);
 	}
 	
-	private static boolean withinRange(int n, int start, int end) {
+	/**
+	 * 
+	 * @param n
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	private boolean withinRange(int n, int start, int end) {
 	    return n >= start && n <= end;
 	}
 	
-	private static int comparableCompoundChecker(int i1, int i2) {
+	/**
+	 * 
+	 * @param i1
+	 * @param i2
+	 * @return
+	 */
+	private int comparableCompoundChecker(int i1, int i2) {
 		int[][] lookupTable = {
 			{0x1169, 0x1161, 0x116A}, {0x1169, 0x1162, 0x116B},
 			{0x1169, 0x1175, 0x116C}, {0x116E, 0x1165, 0x116F},
@@ -210,7 +307,13 @@ public class KoreanLetterConversion {
 		return -1;
 	}
 	
-	private static int convertToProperUnicode(int n, int i) {
+	/**
+	 * 
+	 * @param n
+	 * @param i
+	 * @return
+	 */
+	private int convertToProperUnicode(int n, int i) {
 	    if (
 	        withinRange(n, FINAL_CONST_RANGE_START, FINAL_CONST_RANGE_END) || 
 	        withinRange(n, VOWEL_RANGE_START, VOWEL_RANGE_END) || 
@@ -255,17 +358,20 @@ public class KoreanLetterConversion {
 	    
 	    return -1;
 	}
-    
-    class KoreanLetterConversionDemo {
-        public static void main(String[] args) throws Exception {
-            String[] arguments = new String[] { "환", "영", "합", "니", "다" };
-            for (String a : arguments) {
-                List<String> jamo = breakdownKoreanCharacter(a.charAt(0));
-                System.out.println("Array of sounds: " + jamo);
-                String ret = buildupKoreanCharacter(jamo);
-                System.out.println("Built-up character: " + ret);
-                System.out.println();
-            }
-        }
-    }
+}
+
+class KoreanLetterConversionDemo {
+	public static void main(String[] args) {
+		KoreanLetterConversion klc = new KoreanLetterConversion();
+		String[] arguments = new String[] { "환", "영", "합", "니", "다" };
+
+		for (String a : arguments) {
+			List<String> jamo = klc.convertCharacterToLetterArray(a.charAt(0));
+
+			System.out.println("Array of sounds: " + jamo);
+			System.out.println("Built-up character: " + klc.convertLetterArrayToCharacter(jamo));
+
+			System.out.println();
+		}
+	}
 }
