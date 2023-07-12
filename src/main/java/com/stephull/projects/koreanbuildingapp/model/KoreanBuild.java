@@ -1,23 +1,13 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
-import com.stephull.projects.koreanbuildingapp.service.KoreanLetterConversion;
 
 import java.util.List;
 import java.util.Optional;
 
 @Document(collection = "KoreanBuilds")
 public class KoreanBuild {
-
-    @Autowired
-    private KBRepository kbrepo;
-
-    @Autowired
-    private KoreanLetterConversion klc;
 
     @Id
     private String id;
@@ -26,31 +16,35 @@ public class KoreanBuild {
     private String build;
     private String unicode;
 
-    //private KoreanBuildSound sound;
-    //private KoreanBuildStats stats;
+    private KoreanBuildSound sound;
+    private KoreanBuildStats stats;
     private List<KoreanSpeechCluster> assembly;
     private KoreanSpeechCluster base;
 
-    //private Optional<List<KoreanBuild>> consonants;
-    //private Optional<List<KoreanBuild>> vowels;
+    private Optional<List<KoreanBuild>> consonants;
+    private Optional<List<KoreanBuild>> vowels;
 
     public KoreanBuild() {}
 
     // normal constructor
     public KoreanBuild(
         String build,
-        String unicode
+        String unicode,
+        KoreanBuildSound sound,
+        KoreanBuildStats stats,
+        List<KoreanSpeechCluster> assembly,
+        KoreanSpeechCluster base,
+        Optional<List<KoreanBuild>> consonants,
+        Optional<List<KoreanBuild>> vowels
     ) {
         this.build = build;
         this.unicode = unicode;
-
-        //this.sound = new KoreanBuildSound(build);
-        //this.stats = new KoreanBuildStats(build);
-        this.assembly = klc.convertCharacterToClusterArray(build);
-        this.base = this.assembly.get(this.assembly.size() - 1);
-
-        //this.consonants = Optional.ofNullable(kbrepo.findConsonantsByBuild(build));
-        //this.vowels = Optional.ofNullable(kbrepo.findVowelsByBuild(build));
+        this.sound = sound;
+        this.stats = stats;
+        this.assembly = assembly;
+        this.base = base;
+        this.consonants = consonants;
+        this.vowels = vowels;
     }
 
     public String getId() {
@@ -89,7 +83,7 @@ public class KoreanBuild {
         this.unicode = newUnicode;
     }
 
-    /*public KoreanBuildSound getSound() {
+    public KoreanBuildSound getSound() {
         return this.sound;
     }
 
@@ -103,7 +97,7 @@ public class KoreanBuild {
 
     public void setStats(KoreanBuildStats newStats) {
         this.stats = newStats;
-    }*/
+    }
 
     public List<KoreanSpeechCluster> getAssembly() {
         return this.assembly;
@@ -113,7 +107,7 @@ public class KoreanBuild {
         this.assembly = newAssembly;
     }
 
-    /*public List<KoreanBuild> getConsonants() {
+    public List<KoreanBuild> getConsonants() {
         return this.consonants.orElse(null);
     }
 
@@ -127,7 +121,7 @@ public class KoreanBuild {
 
     public void setVowels(Optional<List<KoreanBuild>> newVowels) {
         this.vowels = newVowels;
-    }*/
+    }
 
     @Override
     public String toString() {
@@ -145,12 +139,12 @@ public class KoreanBuild {
             id, kbid,
             build,
             unicode,
-            //sound,
-            //stats,
+            sound,
+            stats,
             assembly,
-            base
-            //consonants,
-            //vowels
+            base,
+            consonants,
+            vowels
         );
         return ret.indent(2);
     }
@@ -162,14 +156,16 @@ public class KoreanBuild {
         private boolean replace;
         private Optional<KoreanPronunciation> pronunciation;
 
-        public KoreanBuildSound(String build) {
-            key = kbrepo.findSoundKeyByBuild(build);
-            
-            boolean[] special = kbrepo.findSpecialSingularPronunciationByBuild(build);
-            silent = special[0];
-            replace = special[1];
-
-            pronunciation = Optional.ofNullable(kbrepo.findPronunciationByBuild(build));
+        public KoreanBuildSound(
+            String key,
+            boolean silent,
+            boolean replace,
+            Optional<KoreanPronunciation> pronunciation
+        ) {
+            this.key = key;
+            this.silent = silent;
+            this.replace = replace;
+            this.pronunciation = pronunciation;
         }
 
         public String getKey() {
@@ -228,8 +224,8 @@ public class KoreanBuild {
         private int appearences;
 
         public KoreanBuildStats(String build) {
-            frequency = kbrepo.findAppearencesStatsByBuild(build);
-            appearences = kbrepo.findFrequencyStatsByBuild(build);
+            this.frequency = frequency;
+            this.appearences = appearences;
         }
 
         public double getFrequency() {

@@ -2,20 +2,13 @@ package com.stephull.projects.koreanbuildingapp.service;
 
 import com.stephull.projects.koreanbuildingapp.model.KoreanSpeechCluster;
 import com.stephull.projects.koreanbuildingapp.model.SpeechType;
-//import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-@Service
 public class KoreanLetterConversion {
-
-	//@Autowired
-	//private KBRepository kbrepo;
     
     private static final int INIT_CONST_RANGE_START = 0x1100;
     private static final int INIT_CONST_RANGE_END = 0x1112;
@@ -29,18 +22,22 @@ public class KoreanLetterConversion {
     private static final int VOWEL_INDEX = 21;
 
 	/**
-	 * 
+	 * Input of type String redirected to similar method that takes in char
 	 * @param character
-	 * @return
+	 * @return List<KoreanSpeechCluster>
 	 */
 	public List<KoreanSpeechCluster> convertCharacterToClusterArray(String character) {
+		if (character.length() < 1 || character.length() > 2) {
+			return new ArrayList<KoreanSpeechCluster>();
+		}
 		return this.convertCharacterToClusterArray(character.charAt(0));
 	}
 
 	/**
-	 * 
+	 * Converts Korean character to sequential letter array, then converts each
+	 *  sound in letter array into speech clusters, with information on unicode and speech type
 	 * @param character
-	 * @return
+	 * @return List<KoreanSpeechCluster>
 	 */
 	public List<KoreanSpeechCluster> convertCharacterToClusterArray(char character) {
 		List<KoreanSpeechCluster> clusters = new ArrayList<KoreanSpeechCluster>();
@@ -49,6 +46,8 @@ public class KoreanLetterConversion {
 		for (String s : sounds) {
 			int soundCode = (int) s.charAt(0);
 
+			// ... for romanization of sound
+			// (maybe fetch from database or speech-synthesis API ?!?)
 			//String roman = kbrepo.findSoundRomanizationByLetter(s);
 
 			SpeechType st;
@@ -70,18 +69,21 @@ public class KoreanLetterConversion {
 	}
 
 	/**
-	 * 
+	 * Input of type String redirected to similar method that takes in char
 	 * @param character
-	 * @return
+	 * @return List<String>
 	 */
 	public List<String> convertCharacterToLetterArray(String character) {
+		if (character.length() < 1 || character.length() > 2) {
+			return new ArrayList<String>();
+		}
 		return this.convertCharacterToLetterArray(character.charAt(0));
 	}
 
 	/**
-	 * 
+	 * Converts Korean character into an array of sequential ordered sounds
 	 * @param character
-	 * @return
+	 * @return List<String> 
 	 */
     public List<String> convertCharacterToLetterArray(char character) {
         List<String> jamoCharacters = new ArrayList<String>();
@@ -198,18 +200,21 @@ public class KoreanLetterConversion {
     }
     
 	/**
-	 * 
+	 * Converts a cluster array, with a sequential order of consonants and vowels, 
+	 * 	to rebuild a Korean character
 	 * @param clusters
-	 * @return
+	 * @return String
 	 */
 	public String convertClusterArrayToCharacter(List<KoreanSpeechCluster> clusters) {
-		return "";
+		List<String> temporarySounds = new ArrayList<String>();
+		clusters.forEach((c) -> temporarySounds.add(c.getLetter()));
+		return this.convertLetterArrayToCharacter(temporarySounds);
 	}
 
 	/**
-	 * 
+	 * Convert array of sequentially-placed consonants and vowels and build Korean character
 	 * @param sounds
-	 * @return
+	 * @return String
 	 */
     public String convertLetterArrayToCharacter(List<String> sounds) {
 		int sLength = sounds.size();
@@ -271,21 +276,21 @@ public class KoreanLetterConversion {
 	}
 	
 	/**
-	 * 
+	 * Check condition such that requested number (n) is within range of start to end
 	 * @param n
 	 * @param start
 	 * @param end
-	 * @return
+	 * @return boolean
 	 */
 	private boolean withinRange(int n, int start, int end) {
 	    return n >= start && n <= end;
 	}
 	
 	/**
-	 * 
+	 * Compare two consonants or two vowels to match compound letter via lookup table
 	 * @param i1
 	 * @param i2
-	 * @return
+	 * @return int
 	 */
 	private int comparableCompoundChecker(int i1, int i2) {
 		int[][] lookupTable = {
@@ -308,10 +313,12 @@ public class KoreanLetterConversion {
 	}
 	
 	/**
-	 * 
+	 * Compare given unicode value to confirm that it is correct for hexadecimal operations
+	 *  to rebuild Korean character. If already correct, assume that it is within established
+	 *  range of either initial/final consonants, or vowels. 
 	 * @param n
 	 * @param i
-	 * @return
+	 * @return int
 	 */
 	private int convertToProperUnicode(int n, int i) {
 	    if (
@@ -358,20 +365,130 @@ public class KoreanLetterConversion {
 	    
 	    return -1;
 	}
+
+	// ADD METHODS
+
+	/**
+	 * 
+	 * @param curr
+	 * @param letter
+	 * @return List<String>
+	 */
+	protected List<String> addLetterToLetterArray(List<String> curr, String letter) {
+		if (letter.length() < 1 || letter.length() > 2) {
+			return curr;
+		}
+		return this.addLetterToLetterArray(curr, letter.charAt(0));
+	}
+
+	/**
+	 * 
+	 * @param curr
+	 * @param letter
+	 * @return List<String>
+	 */
+	protected List<String> addLetterToLetterArray(List<String> curr, char letter) {
+		//
+	}
+
+	/**
+	 * 
+	 * @param curr
+	 * @param cluster
+	 * @return List<KoreanSpeechCluster>
+	 */
+	protected List<KoreanSpeechCluster> addClusterToClusterArray(
+		List<KoreanSpeechCluster> curr, KoreanSpeechCluster cluster
+	) {
+		//
+	}
+
+	/**
+	 * 
+	 * @param curr
+	 * @param character
+	 * @return List<KoreanSpeechCluster>
+	 */
+	protected List<KoreanSpeechCluster> addLetterToClusterArray(
+		List<KoreanSpeechCluster> curr, String character
+	) {
+		if (character.length() < 1 || character.length() > 2) {
+			return curr;
+		}
+		return this.addLetterToClusterArray(curr, character.charAt(0));
+	}
+
+	/**
+	 * 
+	 * @param curr
+	 * @param character
+	 * @return List<KoreanSpeechCluster>
+	 */
+	protected List<KoreanSpeechCluster> addLetterToClusterArray(
+		List<KoreanSpeechCluster> curr, char character
+	) {
+		//
+	}
+
+	// UPDATE METHODS
+
+	protected List<String> updateLetterInLetterArray() {
+
+	}
+
+	protected List<String> updateLetterInLetterArray() {
+
+	}
+
+	protected List<KoreanSpeechCluster> updateClusterInClusterArray() {
+
+	}
+
+	protected List<KoreanSpeechCluster> updateLetterInClusterArray() {
+
+	}
+
+	protected List<KoreanSpeechCluster> updateLetterInClusterArray() {
+
+	}
+
+	// DELETE METHODS
+
+	protected List<String> deleteLetterFromLetterArray() {
+
+	}
+
+	protected List<String> deleteLetterFromLetterArray() {
+		
+	}
+
+	protected List<KoreanSpeechCluster> deleteClusterFromClusterArray() {
+
+	}
+
+	protected List<KoreanSpeechCluster> deleteLetterFromClusterArray() {
+
+	}
+
+	protected List<KoreanSpeechCluster> deleteLetterFromClusterArray() {
+		
+	}
+
 }
 
 class KoreanLetterConversionDemo {
+
+	protected static KoreanLetterConversion klc = new KoreanLetterConversion();
+
+	public static void demo(String a) {
+		List<String> j = klc.convertCharacterToLetterArray(a.charAt(0));
+		System.out.println("Array of sounds: " + j);
+		System.out.println("Built-up character: " + klc.convertLetterArrayToCharacter(j));
+		System.out.println();
+	}
+
 	public static void main(String[] args) {
-		KoreanLetterConversion klc = new KoreanLetterConversion();
 		String[] arguments = new String[] { "환", "영", "합", "니", "다" };
-
-		for (String a : arguments) {
-			List<String> jamo = klc.convertCharacterToLetterArray(a.charAt(0));
-
-			System.out.println("Array of sounds: " + jamo);
-			System.out.println("Built-up character: " + klc.convertLetterArrayToCharacter(jamo));
-
-			System.out.println();
-		}
+		Arrays.stream(arguments).forEach(a -> demo(a));
 	}
 }
