@@ -375,10 +375,9 @@ public class KoreanLetterConversion {
 	 * @return List<String>
 	 */
 	protected List<String> addLetterToLetterArray(List<String> curr, String letter) {
-		if (letter.length() < 1 || letter.length() > 2) {
-			return curr;
-		}
-		return this.addLetterToLetterArray(curr, letter.charAt(0));
+		if (letter.length() < 1 || letter.length() > 1) return curr;
+		curr.add(letter);
+		return curr;
 	}
 
 	/**
@@ -388,7 +387,7 @@ public class KoreanLetterConversion {
 	 * @return List<String>
 	 */
 	protected List<String> addLetterToLetterArray(List<String> curr, char letter) {
-		//
+		return this.addLetterToLetterArray(curr, Character.toString(letter));
 	}
 
 	/**
@@ -400,7 +399,8 @@ public class KoreanLetterConversion {
 	protected List<KoreanSpeechCluster> addClusterToClusterArray(
 		List<KoreanSpeechCluster> curr, KoreanSpeechCluster cluster
 	) {
-		//
+		// FIX THIS
+		return new ArrayList<>();
 	}
 
 	/**
@@ -412,10 +412,15 @@ public class KoreanLetterConversion {
 	protected List<KoreanSpeechCluster> addLetterToClusterArray(
 		List<KoreanSpeechCluster> curr, String character
 	) {
-		if (character.length() < 1 || character.length() > 2) {
-			return curr;
-		}
-		return this.addLetterToClusterArray(curr, character.charAt(0));
+		if (character.length() < 1 || character.length() > 1) return curr;
+
+		KoreanSpeechCluster newKsc = new KoreanSpeechCluster();
+		newKsc.setLetter(character);
+
+		// other logic...
+
+		curr.add(newKsc);
+		return curr;
 	}
 
 	/**
@@ -427,51 +432,137 @@ public class KoreanLetterConversion {
 	protected List<KoreanSpeechCluster> addLetterToClusterArray(
 		List<KoreanSpeechCluster> curr, char character
 	) {
-		//
+		return this.addLetterToClusterArray(curr, Character.toString(character));
+	}
+
+	/**
+	 * 
+	 * @param build
+	 * @param letter
+	 * @param index
+	 * @return
+	 */
+	protected String updateCharacterWithAdditionalLetter(String build, String letter, int index) {
+		if (letter.length() < 1 || letter.length() > 1) return build;
+		return new String("");
+	}
+
+	/**
+	 * 
+	 * @param build
+	 * @param character
+	 * @param index
+	 * @return
+	 */
+	protected String updateCharacterWithAdditionalLetter(String build, char character, int index) {
+		return this.updateCharacterWithAdditionalLetter(build, Character.toString(character), index);
+	}
+
+	/**
+	 * 
+	 * @param build
+	 * @param original
+	 * @param replacement
+	 * @return
+	 */
+	protected String updateCharacterWithChangeInLetter(String build, String original, String replacement) {
+		if (original.length() < 1 || original.length() > 1) return build;
+		return new String("");
+	}
+
+	/**
+	 * 
+	 * @param build
+	 * @param original
+	 * @param replacement
+	 * @return
+	 */
+	protected String updateCharacterWithChangeInLetter(String build, char original, char replacement) {
+		String o = Character.toString(original), r = Character.toString(replacement);
+		return updateCharacterWithChangeInLetter(build, o, r);
+	}
+
+	/**
+	 * 
+	 * @param build
+	 * @param wantRemoved
+	 * @return
+	 */
+	protected String updateCharacterWithRemovalOfLetter(String build, String wantRemoved) {
+		if (wantRemoved.length() < 1 || wantRemoved.length() > 2) return build;
+		return new String("");
+	}
+
+	/**
+	 * 
+	 * @param build
+	 * @param wantRemoved
+	 * @return
+	 */
+	protected String updateCharacterWithRemovalOfLetter(String build, char wantRemoved) {
+		return this.updateCharacterWithRemovalOfLetter(build, Character.toString(wantRemoved));
 	}
 
 	// UPDATE METHODS
 
-	protected List<String> updateLetterInLetterArray() {
+	protected List<String> updateLetterInLetterArray(List<String> letters, String patch, int index) {
+		if (patch.length() < 1 || patch.length() > 1) return letters;
+		
+		//
 
+		return letters;
 	}
 
-	protected List<String> updateLetterInLetterArray() {
-
-	}
+	protected List<String> updateLetterInLetterArray(List<String> letters, char patch, int index) {
+		return this.updateLetterInLetterArray(letters, Character.toString(patch), index);
+	}	
 
 	protected List<KoreanSpeechCluster> updateClusterInClusterArray() {
-
+		// IDK
+		return new ArrayList<>();
 	}
 
-	protected List<KoreanSpeechCluster> updateLetterInClusterArray() {
-
+	protected List<KoreanSpeechCluster> updateLetterInClusterArray(List<KoreanSpeechCluster> clusters, char patch, int index) {
+		return this.updateLetterInClusterArray(clusters, Character.toString(patch), index);
 	}
 
-	protected List<KoreanSpeechCluster> updateLetterInClusterArray() {
+	protected List<KoreanSpeechCluster> updateLetterInClusterArray(List<KoreanSpeechCluster> clusters, String patch, int index) {
+		if (patch.length() < 1 || patch.length() > 1) return clusters;
+	
+		//	
 
+		return clusters;
 	}
 
 	// DELETE METHODS
 
-	protected List<String> deleteLetterFromLetterArray() {
+	protected List<String> deleteLetterFromLetterArray(List<String> letters, String wantRemoved) {
+		if (wantRemoved.length() < 1 || wantRemoved.length() > 1) return letters;
+		
+		//
 
+		return letters;
 	}
 
-	protected List<String> deleteLetterFromLetterArray() {
-		
+	protected List<String> deleteLetterFromLetterArray(List<String> letters, char wantRemoved) {
+		return this.deleteLetterFromLetterArray(letters, Character.toString(wantRemoved));
 	}
 
 	protected List<KoreanSpeechCluster> deleteClusterFromClusterArray() {
-
+		// IDK ?!?
+		return new ArrayList<>();
 	}
 
-	protected List<KoreanSpeechCluster> deleteLetterFromClusterArray() {
+	protected List<KoreanSpeechCluster> deleteLetterFromClusterArray(List<KoreanSpeechCluster> clusters, String wantRemoved) {
+		if (wantRemoved.length() < 1 || wantRemoved.length() > 1) return clusters;
 
+		//
+
+		return clusters;
 	}
 
-	protected List<KoreanSpeechCluster> deleteLetterFromClusterArray() {
-		
+	protected List<KoreanSpeechCluster> deleteLetterFromClusterArray(List<KoreanSpeechCluster> clusters, char wantRemoved) {
+		return this.deleteLetterFromClusterArray(clusters, Character.toString(wantRemoved));
 	}
 
 }

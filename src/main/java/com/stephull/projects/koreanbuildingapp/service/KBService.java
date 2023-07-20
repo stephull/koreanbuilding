@@ -8,10 +8,12 @@ import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
 @Service
 public class KBService {
     
-    private final KBRepository kbrepo;
-    private final KoreanLetterConversion klc;
+    @Autowired
+    private KBRepository kbrepo;
 
     @Autowired
+    private KoreanLetterConversion klc;
+
     public KBService(
         KBRepository kbrepo,
         KoreanLetterConversion klc

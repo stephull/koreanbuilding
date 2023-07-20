@@ -170,13 +170,13 @@ class LinkedListDemo {
     public static void main(String[] args) {
         LinkedList<KoreanBuild> list = new LinkedList<KoreanBuild>();
 
-        KoreanBuild kb1 = new KoreanBuild("한", "D55C");
-        KoreanBuild kb2 = new KoreanBuild("라", "B77C");
-        KoreanBuild kb3 = new KoreanBuild("봉", "BC29");
+        //KoreanBuild kb1 = new KoreanBuild("한", "D55C");
+        //KoreanBuild kb2 = new KoreanBuild("라", "B77C");
+        //KoreanBuild kb3 = new KoreanBuild("봉", "BC29");
 
-        list.add(kb1);
-        list.add(kb2);
-        list.add(kb3);
+        //list.add(kb1);
+        //list.add(kb2);
+        //list.add(kb3);
         
         System.out.println("FINAL LINKED LIST: " + list.toString());
     }

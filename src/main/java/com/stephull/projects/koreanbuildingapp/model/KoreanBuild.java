@@ -262,6 +262,6 @@ public class KoreanBuild {
 
 class KoreanBuildDemo {
     public static void main(String[] args) {
-        KoreanBuild kb1 = new KoreanBuild();
+        //KoreanBuild kb1 = new KoreanBuild();
     }
 }
