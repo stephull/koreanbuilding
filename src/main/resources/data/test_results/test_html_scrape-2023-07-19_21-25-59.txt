@@ -1,0 +1,134 @@
+
+::: Noun 2 :::
+2_noun_word_meaning_0_a_0
+work
+
+2_noun_word_meaning_0_tidbit_0
+activity done for compensation or reward
+
+2_noun_korean_0_0
+회사에서 혹시 어떤 일 하세요?
+
+2_noun_roman_0_0
+hoesa-eseo hoksi eotteon il haseyo?
+
+2_noun_translate_0_0
+Excuse me, what work do you do in the company?
+
+2_noun_roman_0_1
+hoesa-eseo hoksi eotteon il haseyo?
+
+2_noun_translate_0_2
+Excuse me, what work do you do in the company?
+
+2_noun_word_meaning_1_a_0
+fact
+
+2_noun_word_meaning_1_a_1
+event
+
+2_noun_word_meaning_1_a_2
+situation
+
+2_noun_word_meaning_1_text_0
+a
+
+2_noun_word_meaning_1_text_1
+, an
+
+2_noun_word_meaning_1_text_2
+, a
+
+2_noun_word_meaning_1_tidbit_0
+any kind of occurrence
+
+2_noun_korean_1_0
+무슨 일이야?
+
+2_noun_roman_1_0
+museun ir-iya?
+
+2_noun_translate_1_0
+What's the matter?
+
+2_noun_korean_1_1
+이런 일이 있을 줄은 몰랐다.
+
+2_noun_roman_1_1
+Ireon ir-i isseul jur-eun mollatda.
+
+2_noun_translate_1_1
+I didn't know something like this would happen.
+
+2_noun_roman_1_2
+Ireon ir-i isseul jur-eun mollatda.
+
+2_noun_translate_1_3
+I didn't know something like this would happen.
+
+2_noun_korean_1_4
+옛날 일을 생각하니 슬프다.
+
+2_noun_roman_1_4
+Yennal ir-eul saenggakhani seulpeuda.
+
+2_noun_translate_1_4
+It's sad to think about my old circumstances.
+
+2_noun_roman_1_5
+Yennal ir-eul saenggakhani seulpeuda.
+
+2_noun_translate_1_6
+It's sad to think about my old circumstances.
+
+2_noun_word_meaning_2_a_0
+deed
+
+2_noun_word_meaning_2_tidbit_0
+any human activity
+
+2_noun_korean_2_0
+착한 일을 해야지.
+
+2_noun_roman_2_0
+Chakhan ir-eul haeyaji.
+
+2_noun_translate_2_0
+You need to do good things.
+
+2_noun_word_meaning_3_a_0
+urination
+
+2_noun_word_meaning_3_a_1
+defecation
+
+2_noun_word_meaning_3_a_2
+sexual intercourse
+
+2_noun_word_meaning_3_text_0
+,
+
+2_noun_word_meaning_3_text_1
+,
+
+
+
+::: Noun 11 :::
+
+11_noun_word_meaning_0_a_0
+day
+
+11_noun_korean_0_0
+3일 동안 여행하다
+
+11_noun_roman_0_0
+samil dong'an yeohaenghada
+
+11_noun_translate_0_0
+to travel for three days
+
+11_noun_roman_0_1
+samil dong'an yeohaenghada
+
+11_noun_translate_0_2
+to travel for three days
