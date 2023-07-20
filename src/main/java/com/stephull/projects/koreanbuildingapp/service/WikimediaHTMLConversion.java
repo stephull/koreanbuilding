@@ -2,11 +2,9 @@ package com.stephull.projects.koreanbuildingapp.service;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -26,15 +24,42 @@ public class WikimediaHTMLConversion {
     private String charsetString = StandardCharsets.UTF_8.toString();
     private static int sectionIterationCount = 0;
 
+    private static final String SELECTOR_TYPE_TAG_A = "a";
+    private static final String SELECTOR_TYPE_TAG_P = "p";
+    private static final String SELECTOR_TYPE_TAG_H2 = "h2";
+    private static final String SELECTOR_TYPE_TAG_H3_TO_H5 = "h3,h4,h5";
+    private static final String SELECTOR_TYPE_TAG_LI = "li";
+    private static final String SELECTOR_TYPE_TAG_OL = "ol";
+    private static final String SELECTOR_TYPE_TAG_SECTION = "section";
+    private static final String SELECTOR_TYPE_TAG_SPAN = "span";
+
+    private static final String MAP_PROPERTY_ETYMOLOGY = "_etymology_";
+    private static final String MAP_PROPERTY_NOUN_MEANING = "_noun_meaning_";
+    private static final String MAP_PROPERTY_NOUN_WORD = "_noun_word_";
+    private static final String MAP_PROPERTY_PROPER_NOUN = "_proper_noun_";
+    private static final String MAP_PROPERTY_REFERENCE = "_reference_";
+
     /**
      * 
      * @return Map<String, String>
      */
     private Map<String, String> fetchTextFromPTagProperty(String a, Element e) {
         Map<String, String> ret = new LinkedHashMap<String, String>();
-
-        //
-
+        if (a.equals(HTMLPropertyType.ETYMOLOGY)) {
+            String sinoKoreanAttr = "Sino", pTemp, value;
+            Element paragraph = e.select(SELECTOR_TYPE_TAG_P).first();
+            if (paragraph != null) {
+                pTemp = sectionIterationCount + MAP_PROPERTY_ETYMOLOGY;
+                boolean sino = paragraph.text().contains(sinoKoreanAttr);
+                if (sino) {
+                    Element hanjaMention = paragraph.select("i.Kore.mention").first();
+                    value = hanjaMention.text();
+                } else {
+                    value = paragraph.text();
+                }
+                ret.put(pTemp + (sino ? "hanja" : "def"), value);
+            }
+        }
         return ret;
     }
     
@@ -45,7 +70,13 @@ public class WikimediaHTMLConversion {
     private Map<String, String> fetchTextFromUlListProperty(String a, Element e) {
         Map<String, String> ret = new LinkedHashMap<String, String>();
 
-        //
+        if (a.equalsIgnoreCase(HTMLPropertyType.USAGE_NOTES)) {
+            //
+        }
+
+        if (a.equalsIgnoreCase(HTMLPropertyType.DERIVED_TERMS)) {
+            //
+        }
 
         return ret;
     }
@@ -57,48 +88,49 @@ public class WikimediaHTMLConversion {
     private Map<String, String> fetchTextFromOlListProperty(String a, Element e) {
         Map<String, String> ret = new LinkedHashMap<String, String>();
 
+        Element ol = e.select(SELECTOR_TYPE_TAG_OL).first();
+        Elements bullets = ol.select(SELECTOR_TYPE_TAG_LI);
+        int bulletIndex = 0;
+        
         if (a.equalsIgnoreCase(HTMLPropertyType.NOUN)) {
-            Element ol = e.select("ol").first();
-            Elements bullets = ol.select("li");
-                        
-            int bulletIndex = 0;
-
             for (Element b : bullets) {
                 // ::: get English definitions:
                 // ... start with <a/> tags that indicate definition
                 Elements aWithIdList = b.select("a[id^=mw]");
                 if (aWithIdList != null) {
-                    String aTemp; int aIndex = 0;
+                    String aTemp; 
+                    int aIndex = 0;
                     for (Element i : aWithIdList) {
                         String iText = i.text().trim();
                         if (iText.length() < 1) continue;
-                        aTemp = sectionIterationCount + "_noun_word_meaning_" + bulletIndex + "_a_" + aIndex++;
+                        aTemp = sectionIterationCount + MAP_PROPERTY_NOUN_MEANING + bulletIndex + "_a_" + aIndex++;
                         ret.put(aTemp, iText);
                     }
                 }
                 // ... get plain text for rest of definition
                 List<TextNode> textNodes = b.textNodes();
                 if (textNodes != null) {
-                    String tnTemp; int tnIndex = 0;
+                    String tnTemp; 
+                    int tnIndex = 0;
                     for (TextNode tn : textNodes) {
                         String tnText = tn.text().trim();
                         if (tnText.length() < 1) continue;
-                        tnTemp = sectionIterationCount + "_noun_word_meaning_" + bulletIndex + "_text_" + tnIndex++;
+                        tnTemp = sectionIterationCount + MAP_PROPERTY_NOUN_MEANING + bulletIndex + "_text_" + tnIndex++;
                         ret.put(tnTemp, tnText);
                     }
                 }
                 // ... get any text in the parentheses
                 Elements clarityElements = b.select("span.ib-content.qualifier-content");
                 if (clarityElements != null) {
-                    String cTemp; int cIndex = 0;
+                    String cTemp; 
+                    int cIndex = 0;
                     for (Element c : clarityElements) {
                         String cText = c.text().trim();
                         if (cText.length() < 1) continue;
-                        cTemp = sectionIterationCount + "_noun_word_meaning_" + bulletIndex + "_tidbit_" + cIndex++;
+                        cTemp = sectionIterationCount + MAP_PROPERTY_NOUN_MEANING + bulletIndex + "_tidbit_" + cIndex++;
                         ret.put(cTemp, cText);
                     }
                 }
-
                 // ::: get examples with Korean, roman., and translation:
                 Element bulletDl = b.select("dl").first();
                 if (bulletDl != null) {
@@ -109,7 +141,7 @@ public class WikimediaHTMLConversion {
                         Element bulletContextKorean = dl.select("i.Kore.mention.e-example").first();
                         if (bulletContextKorean != null) {
                             ret.put(
-                                sectionIterationCount + "_noun_korean_" + bulletIndex + "_" + dlIndex, 
+                                sectionIterationCount + MAP_PROPERTY_NOUN_WORD + bulletIndex + "_korean_" + dlIndex, 
                                 bulletContextKorean.text()
                             );
                         }
@@ -117,7 +149,7 @@ public class WikimediaHTMLConversion {
                         Element bulletContextRomanized = dl.select("i.e-transliteration.tr.Latn").first();
                         if (bulletContextRomanized != null) {
                             ret.put(
-                                sectionIterationCount + "_noun_roman_" + bulletIndex + "_" + dlIndex, 
+                                sectionIterationCount + MAP_PROPERTY_NOUN_WORD + bulletIndex + "_romanized_" + dlIndex, 
                                 bulletContextRomanized.text()
                             );
                         }
@@ -125,24 +157,72 @@ public class WikimediaHTMLConversion {
                         Element bulletContextTranslated = dl.select("span.e-translation").first();
                         if (bulletContextTranslated != null) {
                             ret.put(
-                                sectionIterationCount + "_noun_translate_" + bulletIndex + "_" + dlIndex, 
+                                sectionIterationCount + MAP_PROPERTY_NOUN_WORD + bulletIndex + "_translate_" + dlIndex, 
                                 bulletContextTranslated.text()
                             );
                         }
                         dlIndex++;
                     }
                 }
-
                 bulletIndex++;
             }
             return ret;
         }
 
         if (a.equalsIgnoreCase(HTMLPropertyType.PROPER_NOUN)) {
+            for (Element b : bullets) {
+                Elements refAList = b.select(SELECTOR_TYPE_TAG_A);
+                if (refAList != null) {
+                    String refATemp;
+                    int refAIndex = 0;
+                    for (Element refA : refAList) {
+                        String text = refA.text().trim();
+                        if (text.length() < 1) continue;
+                        refATemp = sectionIterationCount + MAP_PROPERTY_PROPER_NOUN + bulletIndex + "_a_" + refAIndex++;
+                        ret.put(refATemp, text);
+                    }
+                }
+                Elements refSpanList = b.select(SELECTOR_TYPE_TAG_SPAN);
+                if (refSpanList != null) {
+                    String refSpanTemp;
+                    int refSpanIndex = 0;
+                    for (Element refSpan : refSpanList) {
+                        String text = refSpan.text().trim();
+                        if (text.length() < 1) continue;
+                        refSpanTemp = sectionIterationCount + MAP_PROPERTY_PROPER_NOUN + bulletIndex + "_span_" + refSpanIndex++;
+                        ret.put(refSpanTemp, text);
+                    }
+                }
+                List<TextNode> refTextList = b.textNodes();
+                if (refTextList != null) {
+                    String refTextTemp;
+                    int refTextIndex = 0;
+                    for (TextNode refText : refTextList) {
+                        String text = refText.text().trim();
+                        if (text.length() < 1) continue;
+                        refTextTemp = sectionIterationCount + MAP_PROPERTY_PROPER_NOUN + bulletIndex + "_text_" + refTextIndex++;
+                        ret.put(refTextTemp, text);
+                    }
+                }
+                bulletIndex++;
+            }
             return ret;
         }
 
-        if (a.equalsIgnoreCase(HTMLPropertyType.REFERENCES)) {
+        if (a.equalsIgnoreCase(HTMLPropertyType.REFERENCES)) {   
+            for (Element b : bullets) {
+                Elements linkList = b.select(SELECTOR_TYPE_TAG_A);
+                int urlIndex = 0;
+                String url, linkTemp, linkText;
+                for (Element link : linkList) {
+                    url = link.attr("href");
+                    if (url.contains("#cite")) continue;
+                    linkTemp = sectionIterationCount + MAP_PROPERTY_REFERENCE + bulletIndex + "_hyperlink_" + urlIndex++;
+                    ret.put(linkTemp, url);
+                }
+                linkText = sectionIterationCount + MAP_PROPERTY_REFERENCE + bulletIndex++;
+                ret.put(linkText, b.text());
+            }
             return ret;
         }
 
@@ -187,12 +267,8 @@ public class WikimediaHTMLConversion {
             case HTMLPropertyType.REFERENCES:
                 value = this.fetchTextFromOlListProperty(head, e);
                 break;
-            case HTMLPropertyType.ETYMOLOGY:
-                value = this.fetchTextFromPTagProperty(head, e);
-                break;
             case HTMLPropertyType.PRONUNCIATION:
                 value = this.fetchTextFromLiProperty(head, e);
-                value.putAll(this.fetchTextFromUlListProperty(head, e));
                 value.putAll(this.fetchTextFromTableProperty(head, e));
                 break;
             case HTMLPropertyType.DERIVED_TERMS:
@@ -204,6 +280,11 @@ public class WikimediaHTMLConversion {
                 value = this.fetchTextFromTableProperty(head, e);
                 break;
             default:
+                if (head.startsWith(HTMLPropertyType.ETYMOLOGY)) {
+                    value = this.fetchTextFromPTagProperty(
+                        HTMLPropertyType.ETYMOLOGY, e
+                    );
+                }
                 break;
         }
 
@@ -219,7 +300,7 @@ public class WikimediaHTMLConversion {
     public Map<String, Map<String, String>> fetchPropertiesFromWikimediaHTML(Document doc) {
         Map<String, Map<String, String>> properties = new LinkedHashMap<String, Map<String, String>>();
         
-        Elements sectionElements = doc.select("section");
+        Elements sectionElements = doc.select(SELECTOR_TYPE_TAG_SECTION);
 
         String defaultLang = "Korean";
         boolean isKorean = false;
@@ -227,17 +308,14 @@ public class WikimediaHTMLConversion {
 
         for (Element section : sectionElements) {
             // if lang. is not Korean, skip section & go to next iteration/finish loop: 
-            Element languageHeader = section.select("h2").first();
+            Element languageHeader = section.select(SELECTOR_TYPE_TAG_H2).first();
             if (languageHeader != null) {
                 isKorean = languageHeader.text().equalsIgnoreCase(defaultLang);
                 continue;
             }
-            
             if (isKorean) {
-                Element contentElement = section.select("h3, h4, h5").first();
+                Element contentElement = section.select(SELECTOR_TYPE_TAG_H3_TO_H5).first();
                 if (contentElement != null) {
-                    // commented out: prints header of each section
-                    //properties.put("test_" + content_index++, new String[]{ content.html() });
                     Map.Entry<String, Map<String, String>> prop = this.fetchPropertiesFromSection(
                         contentElement.text(), section
                     );
@@ -347,20 +425,19 @@ class WikimediaHTMLConversionDemo2 {
             Map<String, Map<String, String>> testMap = whc.fetchPropertiesFromWikimediaHTML(doc);
             List<String> printProperties = new ArrayList<String>();
 
-            System.out.println("MAP OF HTML PROPERTIES");
             for (Map.Entry<String, Map<String, String>> entry : testMap.entrySet()) {
                 String key = entry.getKey();
                 Map<String, String> value = entry.getValue();
-
+                
                 printProperties.add("::: " + key + " :::");
                 
                 for (Map.Entry<String, String> innerEntry : value.entrySet()) {
                     printProperties.add(innerEntry.getKey());
                     printProperties.add(innerEntry.getValue());
+                    printProperties.add("\n");
                 }
             }
 
-            System.out.println("=====================");
             boolean writtenToFile = dpc.writeToFile("test_html_scrape", ".txt", printProperties); 
             if (writtenToFile) {
                 System.out.println("Log file for HTML printing is ready!");

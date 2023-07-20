@@ -1,0 +1,140 @@
+::: Etymology 1 0 :::
+0_etymology_def
+First attested in the Yongbi eocheon'ga (龍飛御天歌 / 용비어천가), 1447, as Middle Korean 일〯 (Yale: ǐl), related to Middle Korean 일〯다〮 (Yale: ǐl-tá, “to occur, to arise”).[1]
+::: Pronunciation 1 :::
+::: Noun 2 :::
+2_noun_meaning_0_a_0
+work
+2_noun_meaning_0_tidbit_0
+activity done for compensation or reward
+2_noun_word_0_korean_0
+회사에서 혹시 어떤 일 하세요?
+2_noun_word_0_romanized_0
+hoesa-eseo hoksi eotteon il haseyo?
+2_noun_word_0_translate_0
+Excuse me, what work do you do in the company?
+2_noun_word_0_romanized_1
+hoesa-eseo hoksi eotteon il haseyo?
+2_noun_word_0_translate_2
+Excuse me, what work do you do in the company?
+2_noun_meaning_1_a_0
+fact
+2_noun_meaning_1_a_1
+event
+2_noun_meaning_1_a_2
+situation
+2_noun_meaning_1_text_0
+a
+2_noun_meaning_1_text_1
+, an
+2_noun_meaning_1_text_2
+, a
+2_noun_meaning_1_tidbit_0
+any kind of occurrence
+2_noun_word_1_korean_0
+무슨 일이야?
+2_noun_word_1_romanized_0
+museun ir-iya?
+2_noun_word_1_translate_0
+What's the matter?
+2_noun_word_1_korean_1
+이런 일이 있을 줄은 몰랐다.
+2_noun_word_1_romanized_1
+Ireon ir-i isseul jur-eun mollatda.
+2_noun_word_1_translate_1
+I didn't know something like this would happen.
+2_noun_word_1_romanized_2
+Ireon ir-i isseul jur-eun mollatda.
+2_noun_word_1_translate_3
+I didn't know something like this would happen.
+2_noun_word_1_korean_4
+옛날 일을 생각하니 슬프다.
+2_noun_word_1_romanized_4
+Yennal ir-eul saenggakhani seulpeuda.
+2_noun_word_1_translate_4
+It's sad to think about my old circumstances.
+2_noun_word_1_romanized_5
+Yennal ir-eul saenggakhani seulpeuda.
+2_noun_word_1_translate_6
+It's sad to think about my old circumstances.
+2_noun_meaning_2_a_0
+deed
+2_noun_meaning_2_tidbit_0
+any human activity
+2_noun_word_2_korean_0
+착한 일을 해야지.
+2_noun_word_2_romanized_0
+Chakhan ir-eul haeyaji.
+2_noun_word_2_translate_0
+You need to do good things.
+2_noun_meaning_3_a_0
+urination
+2_noun_meaning_3_a_1
+defecation
+2_noun_meaning_3_a_2
+sexual intercourse
+2_noun_meaning_3_text_0
+,
+2_noun_meaning_3_text_1
+,
+::: Derived terms 3 :::
+::: Etymology 2 4 :::
+4_etymology_hanja
+一
+::: Pronunciation 5 :::
+::: Numeral 6 :::
+::: Usage notes 7 :::
+::: Derived terms 8 :::
+::: Etymology 3 9 :::
+9_etymology_hanja
+日
+::: Pronunciation 10 :::
+::: Noun 11 :::
+11_noun_meaning_0_a_0
+day
+11_noun_word_0_korean_0
+3일 동안 여행하다
+11_noun_word_0_romanized_0
+samil dong'an yeohaenghada
+11_noun_word_0_translate_0
+to travel for three days
+11_noun_word_0_romanized_1
+samil dong'an yeohaenghada
+11_noun_word_0_translate_2
+to travel for three days
+::: Proper noun 12 :::
+12_proper_noun_0_a_0
+일본(日本)
+12_proper_noun_0_a_1
+Japan
+12_proper_noun_0_span_0
+Short for 일본(日本) (Ilbon, “Japan”)
+12_proper_noun_0_span_1
+일본(日本) (Ilbon, “Japan”)
+12_proper_noun_0_span_2
+(
+12_proper_noun_0_span_3
+Ilbon
+12_proper_noun_0_span_4
+“
+12_proper_noun_0_span_5
+Japan
+12_proper_noun_0_span_6
+”
+12_proper_noun_0_span_7
+)
+12_proper_noun_0_span_8
+.
+::: Usage notes 13 :::
+::: Derived terms 14 :::
+::: Etymology 4 15 :::
+15_etymology_def
+Korean reading of various Chinese characters.
+::: Syllable 16 :::
+::: References 17 :::
+17_reference_0_hyperlink_0
+https://en.wikipedia.org/wiki/Samuel%20Elmo%20Martin
+17_reference_0_hyperlink_1
+./Special:BookSources/9780824818098
+17_reference_0
+↑ Samuel Elmo Martin (2000) Consonant Lenition in Korean and the Macro-Altaic Question, Honolulu: University of Hawaii Press, →ISBN
