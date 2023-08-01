@@ -9,8 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection="KorEngDictionary")
 public class KorEngDictionary {
     
-    @Id
-    private String id;
+    @Id private String id;
 
     private CustomID<KorEngDictionary> kedid;
     private String entry;

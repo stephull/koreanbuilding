@@ -11,6 +11,32 @@ public class DictionaryDefinition {
     private Optional<String> context; 
     private Optional<LinkedHashMap<KoreanBuild, ChineseOrigin>> hanja;
 
+    public DictionaryDefinition() {}
+
+    public DictionaryDefinition(
+        String translation,
+        WordType entryType,
+        String meaning
+    ) {
+        this.translation = translation;
+        this.entryType = entryType;
+        this.meaning = meaning;
+    }
+
+    public DictionaryDefinition(
+        String translation,
+        WordType entryType,
+        String meaning,
+        String context,
+        LinkedHashMap<KoreanBuild, ChineseOrigin> hanja
+    ) {
+        this.translation = translation;
+        this.entryType = entryType;
+        this.meaning = meaning;
+        this.context = Optional.ofNullable(context);
+        this.hanja = Optional.ofNullable(hanja);
+    }
+
     public String getTranslation() {
         return this.translation;
     }

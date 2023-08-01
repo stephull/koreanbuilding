@@ -1,0 +1,56 @@
+::: Etymology 0 :::
+0_etymology_hanja
+會社
+
+
+::: Pronunciation 1 :::
+::: Noun 2 :::
+2_noun_meaning_0_a_0
+company
+
+
+2_noun_meaning_0_text_0
+a
+
+
+2_noun_word_0_korean_0
+그는 런던에 새로 문을 여는 한 회사에서 광고 부문 중역으로서의 일자리를 얻었다.
+
+
+2_noun_word_0_romanized_0
+Geu-neun Reondeon-e saero mun-eul yeoneun han hoesa-eseo gwanggo bumun jung'yeogeuroseo-ui iljari-reul eodeotda.
+
+
+2_noun_word_0_translate_0
+He got a new position as advertising executive for a new firm opening in London.
+
+
+2_noun_word_0_romanized_1
+Geu-neun Reondeon-e saero mun-eul yeoneun han hoesa-eseo gwanggo bumun jung'yeogeuroseo-ui iljari-reul eodeotda.
+
+
+2_noun_word_0_translate_2
+He got a new position as advertising executive for a new firm opening in London.
+
+
+2_noun_word_0_korean_3
+진술 내용은 회사의 총무담당 임원에 의하여 준비되고 서명되어야 한다. 필요시에는, 그 서명은 적절한 담당 공무원에 의하여 인증되어야 한다.
+
+
+2_noun_word_0_romanized_3
+Jinsul naeyong-eun hoesa-ui chongmudamdang imwon-e uihayeo junbidoego seomyeongdoeeoya handa. Piryosieneun, geu seomyeong-eun jeokjeolhan damdang gongmuwon-e uihayeo injeungdoeeoya handa.
+
+
+2_noun_word_0_translate_3
+The statement shall be prepared and signed by the Secretary of the Company and, if required, the signature shall be verified by the appropriate governmental official.
+
+
+2_noun_word_0_romanized_4
+Jinsul naeyong-eun hoesa-ui chongmudamdang imwon-e uihayeo junbidoego seomyeongdoeeoya handa. Piryosieneun, geu seomyeong-eun jeokjeolhan damdang gongmuwon-e uihayeo injeungdoeeoya handa.
+
+
+2_noun_word_0_translate_5
+The statement shall be prepared and signed by the Secretary of the Company and, if required, the signature shall be verified by the appropriate governmental official.
+
+
+::: Derived terms 3 :::

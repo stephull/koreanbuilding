@@ -17,10 +17,9 @@ import com.stephull.projects.koreanbuildingapp.repository.ProfileRepository;
 @RequestMapping("/api/profiles")
 public class ProfileController {
 
-    @Autowired
-    protected ProfileRepository profRepo;
+    @Autowired protected ProfileRepository profRepo;
 
-    @GetMapping("/")
+    @GetMapping(value="/")
     public ResponseEntity<List<Profile>> getAllProfiles(
         @RequestParam(required=false) String username
     ) {
@@ -40,7 +39,7 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value="/{id}")
     public ResponseEntity<Profile> getProfileById(
         @PathVariable("id") String id
     ) {
@@ -50,7 +49,7 @@ public class ProfileController {
             : new ResponseEntity<Profile>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/stats/{id}/{level}")
+    @GetMapping(value="/stats/{id}/{level}")
     public ResponseEntity<List<Profile>> getProfileStatsByLevel(
         @PathVariable("id") String gameId,
         @PathVariable("level") Integer gameLevel

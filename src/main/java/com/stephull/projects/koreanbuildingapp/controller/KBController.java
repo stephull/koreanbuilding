@@ -22,14 +22,13 @@ import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
 @RequestMapping("/api/builds")
 public class KBController {
     
-    @Autowired
-    protected KBRepository kbrepo;
+    @Autowired protected KBRepository kbrepo;
 
     /**
      * Get all available builds, optional containing for all builds with given letter/character
      * @return ResponseEntity<ArrayList<KB>>
      */
-    @GetMapping("/")
+    @GetMapping(value="/")
     public ResponseEntity<List<KoreanBuild>> getAllBuilds() {
         try {
             List<KoreanBuild> builds = new ArrayList<KoreanBuild>();
@@ -48,7 +47,7 @@ public class KBController {
      * @param id
      * @return ResponseEntity<KB>
      */
-    @GetMapping("/{id}")
+    @GetMapping(value="/{id}")
     public ResponseEntity<KoreanBuild> getBuildById(
         @PathVariable("id") String id
     ) {
@@ -58,7 +57,7 @@ public class KBController {
             : new ResponseEntity<KoreanBuild>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/consonant/first/{character}")
+    @GetMapping(value="/consonant/first/{character}")
     public ResponseEntity<List<KoreanBuild>> getCharactersByFirstConsonantsCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstVowel,
@@ -79,7 +78,7 @@ public class KBController {
         }
     }
 
-    @GetMapping("/vowel/first/{character}")
+    @GetMapping(value="/vowel/first/{character}")
     public ResponseEntity<List<KoreanBuild>> getCharactersByFirstVowelCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstConsonant,
@@ -100,7 +99,7 @@ public class KBController {
         }
     }
 
-    @GetMapping("/vowel/second/{character}")
+    @GetMapping(value="/vowel/second/{character}")
     public ResponseEntity<List<KoreanBuild>> getCharactersBySecondVowelCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstConsonant,
@@ -121,7 +120,7 @@ public class KBController {
         }
     }
 
-    @GetMapping("/consonant/second/{character}")
+    @GetMapping(value="/consonant/second/{character}")
     public ResponseEntity<List<KoreanBuild>> getCharactersByEndingConsonantCharacter(
         @PathVariable("character") String character,
         @RequestParam Optional<String> firstConsonant,

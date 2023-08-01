@@ -33,9 +33,7 @@ public class KoreanBuild {
         KoreanBuildSound sound,
         KoreanBuildStats stats,
         List<KoreanSpeechCluster> assembly,
-        KoreanSpeechCluster base,
-        Optional<List<KoreanBuild>> consonants,
-        Optional<List<KoreanBuild>> vowels
+        KoreanSpeechCluster base
     ) {
         this.build = build;
         this.unicode = unicode;
@@ -43,8 +41,26 @@ public class KoreanBuild {
         this.stats = stats;
         this.assembly = assembly;
         this.base = base;
-        this.consonants = consonants;
-        this.vowels = vowels;
+    }
+
+    public KoreanBuild(
+        String build,
+        String unicode,
+        KoreanBuildSound sound,
+        KoreanBuildStats stats,
+        List<KoreanSpeechCluster> assembly,
+        KoreanSpeechCluster base,
+        List<KoreanBuild> consonants,
+        List<KoreanBuild> vowels
+    ) {
+        this.build = build;
+        this.unicode = unicode;
+        this.sound = sound;
+        this.stats = stats;
+        this.assembly = assembly;
+        this.base = base;
+        this.consonants = Optional.ofNullable(consonants);
+        this.vowels = Optional.ofNullable(vowels);
     }
 
     public String getId() {
