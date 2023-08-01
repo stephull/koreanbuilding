@@ -19,7 +19,7 @@ import org.jsoup.select.Elements;
 
 import com.stephull.projects.koreanbuildingapp.koreanbuilding.DemoPrintConfig;
 
-public class WikimediaHTMLConversion {
+public class WikiHTMLConversion {
     
     private String charsetString = StandardCharsets.UTF_8.toString();
     private static int sectionIterationCount = 0;
@@ -288,7 +288,7 @@ public class WikimediaHTMLConversion {
                 break;
         }
 
-        String newHead = head + " " + sectionIterationCount;
+        String newHead = head+" "+sectionIterationCount;
         return Map.entry(newHead, value);
     }
 
@@ -297,7 +297,7 @@ public class WikimediaHTMLConversion {
      * @param doc
      * @return String[]
      */
-    public Map<String, Map<String, String>> fetchPropertiesFromWikimediaHTML(Document doc) {
+    public Map<String, Map<String, String>> fetchPropertiesFromHTML(Document doc) {
         Map<String, Map<String, String>> properties = new LinkedHashMap<String, Map<String, String>>();
         
         Elements sectionElements = doc.select(SELECTOR_TYPE_TAG_SECTION);
@@ -335,7 +335,7 @@ public class WikimediaHTMLConversion {
      */
     public String encodeURIPercentCode(String normalText) {
         try {
-            boolean noLatin = checkOnlyNonLatinCharacters(normalText);
+            boolean noLatin = this.checkOnlyNonLatinCharacters(normalText);
             return (noLatin) 
                 ? URLEncoder.encode(normalText, charsetString)
                 : normalText;
@@ -366,8 +366,7 @@ public class WikimediaHTMLConversion {
      * @return boolean
      */
     private boolean checkOnlyNonLatinCharacters(String s) {
-        char[] characters = s.toCharArray();
-        for (char c : characters) {
+        for (char c : s.toCharArray()) {
             if (c <= 127) return false;
         }
         return true;
@@ -375,15 +374,16 @@ public class WikimediaHTMLConversion {
 
 }
 
-class WikimediaHTMLConversionDemo1 {
+class WikiHTMLConversionDemo1 {
 
-    private static WikimediaHTMLConversion whc = new WikimediaHTMLConversion();
+    private static WikiHTMLConversion whc = new WikiHTMLConversion();
     private static DemoPrintConfig dpc = new DemoPrintConfig();
 
     public static void demo(String entry) {
         String temp1 = whc.encodeURIPercentCode(entry);
         String temp2 = whc.decodeURIPercentCode(temp1);
-        String result = (entry.equals(temp2)) ? "Same result" : "Failed to encode back";
+        String result = (entry.equals(temp2)) 
+            ? "Same result" : "Failed to encode back";
 
         List<String> prints = new ArrayList<String>();
         prints.add("Original");
@@ -408,37 +408,35 @@ class WikimediaHTMLConversionDemo1 {
 
 }
 
-class WikimediaHTMLConversionDemo2 {
+class WikiHTMLConversionDemo2 {
 
-    private static WikimediaHTMLConversion whc = new WikimediaHTMLConversion();
+    private static WikiHTMLConversion whc = new WikiHTMLConversion();
     private static DemoPrintConfig dpc = new DemoPrintConfig();
 
     private static String baseCwd = System.getProperty("user.dir").replace("\\", "/");
-    private static String testFile = "kr_test_html_2.html";
-    private static String htmlTestFilePath = new String(baseCwd+"/src/main/resources/data/" + testFile);
+    private static String testFile = "kr_test_html_3.html";
+    private static String htmlTestFilePath = baseCwd+"/src/main/resources/data/"+testFile;
 
     public static void main(String[] args) {
         try {
             File htmlFile = new File(htmlTestFilePath);
             Document doc = Jsoup.parse(htmlFile, "UTF-8");
 
-            Map<String, Map<String, String>> testMap = whc.fetchPropertiesFromWikimediaHTML(doc);
+            Map<String, Map<String, String>> testMap = whc.fetchPropertiesFromHTML(doc);
             List<String> printProperties = new ArrayList<String>();
 
             for (Map.Entry<String, Map<String, String>> entry : testMap.entrySet()) {
-                String key = entry.getKey();
                 Map<String, String> value = entry.getValue();
+                printProperties.add("::: " + entry.getKey() + " :::");
                 
-                printProperties.add("::: " + key + " :::");
-                
-                for (Map.Entry<String, String> innerEntry : value.entrySet()) {
-                    printProperties.add(innerEntry.getKey());
-                    printProperties.add(innerEntry.getValue());
-                    printProperties.add("\n");
+                for (Map.Entry<String, String> v : value.entrySet()) {
+                    printProperties.add(v.getKey());
+                    printProperties.add(v.getValue());
                 }
             }
 
-            boolean writtenToFile = dpc.writeToFile("test_html_scrape", ".txt", printProperties); 
+            String fPrefix = "test_html_scrape", fFormat = ".txt";
+            boolean writtenToFile = dpc.writeToFile(fPrefix, fFormat, printProperties); 
             if (writtenToFile) {
                 System.out.println("Log file for HTML printing is ready!");
             }
