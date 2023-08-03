@@ -3,8 +3,15 @@ package com.stephull.projects.koreanbuildingapp.model;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="DictionaryDefinitions")
 public class DictionaryDefinition {
 
+    @Id private String id;
+
+    private CustomID<DictionaryDefinition> ddid;
     private String translation;
     private WordType entryType;    // noun, verb, adverb, etc.
     private String meaning;
@@ -35,6 +42,18 @@ public class DictionaryDefinition {
         this.meaning = meaning;
         this.context = Optional.ofNullable(context);
         this.hanja = Optional.ofNullable(hanja);
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getDdId() {
+        return this.ddid.getCustomID();
+    }
+
+    public void setDdId(String newDdId) {
+        this.ddid.setCustomID(newDdId);
     }
 
     public String getTranslation() {

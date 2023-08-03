@@ -128,7 +128,6 @@ class LinguisticComparison {
 
     private LanguageType language;
     private String context;
-    private Optional<AuditoryData> sound;
 
     public LinguisticComparison() {}
 
@@ -140,30 +139,12 @@ class LinguisticComparison {
         this.context = context;
     }
 
-    public LinguisticComparison(
-        LanguageType language,
-        String context,
-        Optional<AuditoryData> sound
-    ) {
-        this.language = language;
-        this.context = context;
-        this.sound = sound;
-    }
-
     public LanguageType getLanguage() {
         return this.language;
     }
 
     public void setLanguage(LanguageType newLanguage) {
         this.language = newLanguage;
-    }
-
-    public AuditoryData getSound() {
-        return this.sound.orElse(null);
-    }
-
-    public void setSound(Optional<AuditoryData> newSound) {
-        this.sound = newSound;
     }
 
     public String getContext() {
@@ -181,10 +162,9 @@ class LinguisticComparison {
             [
                 Language=%s
                 Context=%s
-                Sound=%s
             ]     
             """,
-            language, context, sound
+            language, context
         );
         return ret.indent(2);
     }

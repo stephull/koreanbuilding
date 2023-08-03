@@ -12,14 +12,14 @@ public class KoreanSpeechCluster {
     private CustomID<KoreanSpeechCluster> kscid;
     private String letter;
     private String romanization;
-    private SpeechType type;
+    private String type;
 
     public KoreanSpeechCluster() {}
 
     public KoreanSpeechCluster(
         String letter,
         String romanization,
-        SpeechType type
+        String type
     ) {
         this.letter = letter;
         this.romanization = romanization;
@@ -54,11 +54,11 @@ public class KoreanSpeechCluster {
         this.romanization = newRomanization;
     }
 
-    public SpeechType getType() {
+    public String getType() {
         return this.type;
     }
 
-    public void setType(SpeechType newType) {
+    public void setType(String newType) {
         this.type = newType;
     }
 
@@ -69,9 +69,10 @@ public class KoreanSpeechCluster {
             [
                 Letter=%s
                 Romanized sound=%s
+                Speech type=%s
             ]
             """,
-            letter, romanization
+            letter, romanization, type
         );
         return ret.indent(2);
     }
