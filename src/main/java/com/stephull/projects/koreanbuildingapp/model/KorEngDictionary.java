@@ -1,7 +1,7 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
 import java.util.List;
-import java.util.Optional;
+//import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,36 +13,33 @@ public class KorEngDictionary {
 
     private CustomID<KorEngDictionary> kedid;
     private String entry;
-    private List<KoreanBuild> associatedBuilds;
+    private List<List<KoreanBuild>> relatedBuilds;
     private List<DictionaryDefinition> definitions;
-    private Optional<AuditoryData> sound;
-    private Optional<VisualData> image;
+    //private Optional<VisualData> image;
 
     public KorEngDictionary() {}
 
     public KorEngDictionary(
         String entry,
-        List<KoreanBuild> associatedBuilds,
+        List<List<KoreanBuild>> relatedBuilds,
         List<DictionaryDefinition> definitions
     ) {
         this.entry = entry;
-        this.associatedBuilds = associatedBuilds;
+        this.relatedBuilds = relatedBuilds;
         this.definitions = definitions;
     }
 
-    public KorEngDictionary(
+    /*public KorEngDictionary(
         String entry,
-        List<KoreanBuild> associatedBuilds,
+        List<List<KoreanBuild>> relatedBuilds,
         List<DictionaryDefinition> definitions,
-        AuditoryData sound,
         VisualData image
     ) {
         this.entry = entry;
-        this.associatedBuilds = associatedBuilds;
+        this.relatedBuilds = relatedBuilds;
         this.definitions = definitions;
-        this.sound = Optional.ofNullable(sound);
         this.image = Optional.ofNullable(image);
-    }
+    }*/
 
     public String getId() {
         return this.id;
@@ -64,12 +61,12 @@ public class KorEngDictionary {
         this.entry = newEntry;
     }
 
-    public List<KoreanBuild> getAssociatedBuilds() {
-        return this.associatedBuilds;
+    public List<List<KoreanBuild>> getRelatedBuilds() {
+        return this.relatedBuilds;
     }
 
-    public void setAssociatedBuilds(List<KoreanBuild> newAssociatedBuilds) {
-        this.associatedBuilds = newAssociatedBuilds;
+    public void setRelatedBuilds(List<List<KoreanBuild>> newRelatedBuilds) {
+        this.relatedBuilds = newRelatedBuilds;
     }
 
     public List<DictionaryDefinition> getDefinitions() {
@@ -80,21 +77,13 @@ public class KorEngDictionary {
         this.definitions = newDefinitions;
     }
 
-    public AuditoryData getSound() {
-        return this.sound.orElse(null);
-    }
-
-    public void setSound(Optional<AuditoryData> newSound) {
-        this.sound = newSound;
-    }
-
-    public VisualData getImage() {
+    /*public VisualData getImage() {
         return this.image.orElse(null);
     }
 
     public void setImage(Optional<VisualData> newImage) {
         this.image = newImage;
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -104,11 +93,10 @@ public class KorEngDictionary {
                 ID=%s
                 Entry=%s
                 Definitions=%s
-                Sound data=%s
                 Image data=%s
             ]        
             """,
-            id, entry, definitions, sound, image
+            id, entry, definitions //, image
         );
         return ret.indent(2);
     }

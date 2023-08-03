@@ -9,6 +9,7 @@ public enum WordType {
     VERB,
     PREPOSITION,
     CONJUNCTION,
-    INTERJECTION
+    INTERJECTION,
+    PROPER_NOUN
 
 }
