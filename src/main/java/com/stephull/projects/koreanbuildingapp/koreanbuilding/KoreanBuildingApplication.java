@@ -2,23 +2,15 @@ package com.stephull.projects.koreanbuildingapp.koreanbuilding;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages="com.stephull.projects")
+@ComponentScan({"com.stephull.projects.koreanbuildingapp"})
+@EnableMongoRepositories("com.stephull.projects.koreanbuildingapp.repository")
 public class KoreanBuildingApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(KoreanBuildingApplication.class, args);
-
-		MongoDatabaseHandler mongoDBHandler = context.getBean(MongoDatabaseHandler.class);
-
-		KoreanBuild testBuild = new KoreanBuild();
-		
-		mongoDBHandler.insertBuild(testBuild);
+		SpringApplication.run(KoreanBuildingApplication.class, args);
 	}
 }

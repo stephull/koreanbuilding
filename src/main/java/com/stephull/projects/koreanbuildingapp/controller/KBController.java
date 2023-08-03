@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,7 +22,7 @@ import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
 @RequestMapping("/api/builds")
 public class KBController {
     
-    @Autowired protected KBRepository kbrepo;
+    protected KBRepository kbrepo;
 
     /**
      * Get all available builds, optional containing for all builds with given letter/character

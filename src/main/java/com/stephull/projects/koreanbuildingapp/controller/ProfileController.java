@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import com.stephull.projects.koreanbuildingapp.repository.ProfileRepository;
 @RequestMapping("/api/profiles")
 public class ProfileController {
 
-    @Autowired protected ProfileRepository profRepo;
+    protected ProfileRepository profRepo;
 
     @GetMapping(value="/")
     public ResponseEntity<List<Profile>> getAllProfiles(
@@ -26,7 +26,7 @@ public class ProfileController {
         try {
             List<Profile> profiles = new ArrayList<Profile>();
             if (username != null) {
-                profRepo.findByUsername(username).forEach(profiles::add);
+                profRepo.findProfileByUsername(username).forEach(profiles::add);
             }
             else {
                 profRepo.findAll().forEach(profiles::add);
@@ -49,7 +49,7 @@ public class ProfileController {
             : new ResponseEntity<Profile>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value="/stats/{id}/{level}")
+   /* @GetMapping(value="/stats/{id}/{level}")
     public ResponseEntity<List<Profile>> getProfileStatsByLevel(
         @PathVariable("id") String gameId,
         @PathVariable("level") Integer gameLevel
@@ -63,5 +63,5 @@ public class ProfileController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stephull.projects.koreanbuildingapp.koreanbuilding.AppPropertyConfig;
 import com.stephull.projects.koreanbuildingapp.model.DictionaryDefinition;
 import com.stephull.projects.koreanbuildingapp.model.KorEngDictionary;
 import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
@@ -30,12 +31,18 @@ import com.stephull.projects.koreanbuildingapp.service.WikiHTMLConversion;
 @RestController
 @RequestMapping("/api/dictionary")
 public class DictionaryController {
+
+    private final AppPropertyConfig appPropertyConfig;
     
-    @Autowired protected KorEngDictRepository kedrepo;
-    @Autowired protected DictionaryService kedservice;
-    @Autowired protected WikiHTMLConversion whc;
-    @Autowired protected KoreanLetterConversion klc;
-    @Autowired protected MongoTemplate mongoTemplate;
+    public DictionaryController(AppPropertyConfig appPropertyConfig) {
+        this.appPropertyConfig = appPropertyConfig;
+    }
+
+    protected KorEngDictRepository kedrepo;
+    protected DictionaryService kedservice;
+    protected WikiHTMLConversion whc;
+    protected KoreanLetterConversion klc;
+    protected MongoTemplate mongoTemplate;
 
     @GetMapping(value="/")
     public ResponseEntity<List<KorEngDictionary>> getAllEntries() {
@@ -69,26 +76,27 @@ public class DictionaryController {
         }
     }
 
+
     @PostMapping(value="/html/{query}/create")
     private ResponseEntity<KorEngDictionary> createNewEntryFromHTML(@PathVariable("query") String query) {
         try {
             String encodedQuery = whc.encodeURIPercentCode(query);
-            String url = "https://en.wiktionary.org/api/rest_v1/page/html/" + encodedQuery;
+
+            String htmlApi = appPropertyConfig.getConfigValue("htmlapi.baseendpoint");
+            String url = htmlApi + encodedQuery;
            
             Document doc = Jsoup.connect(url).get();
-
             Map<String, Map<String, String>> props = whc.fetchPropertiesFromHTML(doc);
-            System.out.println("TEST: " + props);
 
             // inscribe new dictionary entry to MongoDB
             KorEngDictionary newKED = new KorEngDictionary();
             newKED.setEntry(query);
 
             List<DictionaryDefinition> defList = kedservice.convertPropertiesToDefinitions(props);
-            newKED.setDefinitions(defList);
+            newKED.setDefinitions((defList != null) ? defList : null);
 
-            List<KoreanBuild> buildList = kedservice.convertPropertiesToKoreanBuilds(props);
-            newKED.setAssociatedBuilds(buildList);
+            List<List<KoreanBuild>> buildList = kedservice.convertPropertiesOfLinksToKoreanBuilds(props);
+            newKED.setRelatedBuilds((buildList != null) ? buildList : null);
 
             KorEngDictionary compare = mongoTemplate.save(newKED);
 
