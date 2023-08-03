@@ -5,9 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+
 @SpringBootApplication
 @ComponentScan({"com.stephull.projects.koreanbuildingapp"})
 @EnableMongoRepositories("com.stephull.projects.koreanbuildingapp.repository")
+@EnableEncryptableProperties
 public class KoreanBuildingApplication {
 
 	public static void main(String[] args) {

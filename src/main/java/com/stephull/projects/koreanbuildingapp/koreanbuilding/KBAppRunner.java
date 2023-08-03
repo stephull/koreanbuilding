@@ -2,6 +2,7 @@ package com.stephull.projects.koreanbuildingapp.koreanbuilding;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,23 +17,31 @@ import com.stephull.projects.koreanbuildingapp.model.SpeechType;
 
 @Component
 public class KBAppRunner implements CommandLineRunner {
-    
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Override
     public void run(String... args) throws Exception {
-        String a = args[0];
-        if (args.length < 1 || a.equalsIgnoreCase("query")) {
-            doQuery();
-        } else if (a.equalsIgnoreCase("insert")) {
-            doInsert();
-        } else if (a.equalsIgnoreCase("update")) {
-            doUpdate();
-        } else if (a.equalsIgnoreCase("delete")) {
-            doDelete();
-        } else {
-            throw new IllegalArgumentException("Illegal program argument: " + a);
+        System.out.println("\nHello! Pick a number between 1 to 2, for the following options:");
+        System.out.println("1) Query test on Korean cluster");
+        System.out.println("2) Create Korean cluster");
+        System.out.println(":: Non-options will result in an exception. ::");
+        System.out.print(">>> ");
+
+        Scanner sc = new Scanner(System.in);
+        int option = sc.nextInt();
+        sc.close();
+
+        if (option < 1 || option > 2) throw new IllegalArgumentException();
+
+        switch (option) {
+            case 1:
+                doQuery();
+                break;
+            case 2:
+                doInsert();
+                break;
         }
     }
 
@@ -44,52 +53,40 @@ public class KBAppRunner implements CommandLineRunner {
         KoreanSpeechCluster ksc = mongoTemplate.findOne(query, KoreanSpeechCluster.class);
         System.out.println("One type query: " + ksc + '\n');
 
-        // all speech clusters
-        List<KoreanSpeechCluster> kscs = mongoTemplate.findAll(KoreanSpeechCluster.class);
-        System.out.println("Query for all speech clusters: ");
-        kscs.forEach(System.out::println);
-        System.out.println('\n');
-
         // query many clusters by type
-        BasicQuery queryByType = new BasicQuery(" { type: 'vowel' } ");
-        List<KoreanSpeechCluster> vowels = mongoTemplate.find(queryByType, KoreanSpeechCluster.class);
-        System.out.println("Query by type, clusters: ");
-        vowels.forEach(System.out::println);
-        System.out.println("\n");
-
+         BasicQuery queryByType = new BasicQuery(" { type: 'Vowel' } ");
+         List<KoreanSpeechCluster> vowels = mongoTemplate.find(queryByType, KoreanSpeechCluster.class);
+         System.out.println("Query by type, clusters: ");
+         vowels.forEach(System.out::println);
+         System.out.println("\n");
+         
+        // all speech cluster
+         List<KoreanSpeechCluster> kscs = mongoTemplate.findAll(KoreanSpeechCluster.class);
+         System.out.println("Query for all speech clusters: ");
+         kscs.forEach(System.out::println);
+         System.out.println('\n');
+         
     }
 
     private void doInsert() {
 
-        // insert a sample of Korean speech clusters 
-        // (3 vowels, 3 consonants, and 3 final consonants)
+        // insert a sample of Korean speech clusters
         KoreanSpeechCluster constant1 = new KoreanSpeechCluster(
-            "ㄱ", "g", SpeechType.CONSONANT
-        );
+                "ㄱ", "g", SpeechType.CONSONANT);
         KoreanSpeechCluster constant2 = new KoreanSpeechCluster(
-            "ㄴ", "n", SpeechType.CONSONANT
-        );
+                "ㄴ", "n", SpeechType.CONSONANT);
         KoreanSpeechCluster constant3 = new KoreanSpeechCluster(
-            "ㄷ", "d", SpeechType.CONSONANT
-        );
+                "ㄷ", "d", SpeechType.CONSONANT);
         KoreanSpeechCluster endconstant1 = new KoreanSpeechCluster(
-            "ㄱ", "k", SpeechType.END_CONSONANT
-        );
+                "ㄱ", "k", SpeechType.END_CONSONANT);
         KoreanSpeechCluster endconstant2 = new KoreanSpeechCluster(
-            "ㄷ", "t", SpeechType.END_CONSONANT
-        );
-        KoreanSpeechCluster endconstant3 = new KoreanSpeechCluster(
-            "ㅇ", "ng", SpeechType.END_CONSONANT
-        );
+                "ㄷ", "t", SpeechType.END_CONSONANT);
         KoreanSpeechCluster vowel1 = new KoreanSpeechCluster(
-            "ㅏ", "ah", SpeechType.VOWEL
-        );
+                "ㅏ", "ah", SpeechType.VOWEL);
         KoreanSpeechCluster vowel2 = new KoreanSpeechCluster(
-            "ㅓ", "uh", SpeechType.VOWEL
-        );
+                "ㅓ", "uh", SpeechType.VOWEL);
         KoreanSpeechCluster vowel3 = new KoreanSpeechCluster(
-            "ㅠ", "yoo", SpeechType.VOWEL
-        );
+                "ㅠ", "yoo", SpeechType.VOWEL);
 
         // insert one at a time
         mongoTemplate.insert(constant1);
@@ -98,26 +95,12 @@ public class KBAppRunner implements CommandLineRunner {
 
         // insert many
         List<KoreanSpeechCluster> clusters = Arrays.asList(
-            endconstant1,
-            endconstant2,
-            endconstant3,
-            vowel1,
-            vowel2,
-            vowel3
-        );
+                endconstant1,
+                endconstant2,
+                vowel1,
+                vowel2,
+                vowel3);
         mongoTemplate.insert(clusters, KoreanSpeechCluster.class);
-
-    }
-
-    private void doUpdate() {
-
-        //
-
-    }
-
-    private void doDelete() {
-
-        //
 
     }
 
