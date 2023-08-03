@@ -1,23 +1,14 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
 import java.io.File;
-import java.util.Optional;
 
 public class VisualData {
     
     private File file;
     private String source;
-    private Optional<String> description;
+    private String description;
 
     public VisualData() {}
-
-    public VisualData(
-        File file,
-        String source
-    ) {
-        this.file = file;
-        this.source = source;
-    }
 
     public VisualData(
         File file,
@@ -26,7 +17,7 @@ public class VisualData {
     ) {
         this.file = file;
         this.source = source;
-        this.description = Optional.ofNullable(description);
+        this.description = description;
     }
 
     public File getFile() {
@@ -46,10 +37,10 @@ public class VisualData {
     }
 
     public String getDescription() {
-        return this.description.orElse("None");
+        return this.description;
     }
 
-    public void setDescription(Optional<String> newDescription) {
+    public void setDescription(String newDescription) {
         this.description = newDescription;
     }
 

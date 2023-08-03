@@ -3,21 +3,16 @@ package com.stephull.projects.koreanbuildingapp.repository;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Component;
 
-import com.stephull.projects.koreanbuildingapp.model.AuditoryData;
+import com.stephull.projects.koreanbuildingapp.model.DictionaryDefinition;
 import com.stephull.projects.koreanbuildingapp.model.KorEngDictionary;
+import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
 
+@Component
 public interface KorEngDictRepository extends MongoRepository<KorEngDictionary, String> {
     
-    // find all English translations for Korean words
-    List<String> findTranslationByQuery(String query);
+    List<DictionaryDefinition> findDefinitionsByEntry(String entry);
 
-    // find all potential Sino-Korean characters that coincide with Korean word
-    List<String> findSinoOriginsByQuery(String query);
-
-    // find full definitions from Wiktionary based on query
-    List<KorEngDictionary> findDefinitionsByQuery(String query);
-
-    // find potential sound files that give pronunciation
-    List<AuditoryData> findAuditoryDataByQuery(String query);
+    List<List<KoreanBuild>> findRelatedBuildsByEntry(String entry);
 }

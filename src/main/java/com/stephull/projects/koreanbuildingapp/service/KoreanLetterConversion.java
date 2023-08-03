@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class KoreanLetterConversion {
     
     private static final int INIT_CONST_RANGE_START = 0x1100;
@@ -50,7 +53,7 @@ public class KoreanLetterConversion {
 			// (maybe fetch from database or speech-synthesis API ?!?)
 			//String roman = kbrepo.findSoundRomanizationByLetter(s);
 
-			SpeechType st;
+			String st;
 			if (this.withinRange(soundCode, INIT_CONST_RANGE_START, INIT_CONST_RANGE_END)) {
 				st = SpeechType.CONSONANT;
 			} else if (this.withinRange(soundCode, VOWEL_RANGE_START, VOWEL_RANGE_END)) {

@@ -16,9 +16,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import com.stephull.projects.koreanbuildingapp.koreanbuilding.DemoPrintConfig;
 
+@Component
 public class WikiHTMLConversion {
     
     private String charsetString = StandardCharsets.UTF_8.toString();
