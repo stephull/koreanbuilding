@@ -9,7 +9,7 @@ public class KoreanSpeechCluster {
     @Id
     private String id;
 
-    private CustomID<KoreanSpeechCluster> kscid;
+    //private CustomID<KoreanSpeechCluster> kscid;
     private String letter;
     private String romanization;
     private String type;
@@ -30,13 +30,13 @@ public class KoreanSpeechCluster {
         return this.id;
     }
 
-    public String getKscId() {
+    /*public String getKscId() {
         return this.kscid.getCustomID();
     }
 
     public void setKscId(String newKscId) {
         this.kscid.setCustomID(newKscId);
-    }
+    }*/
 
     public String getLetter() {
         return this.letter;

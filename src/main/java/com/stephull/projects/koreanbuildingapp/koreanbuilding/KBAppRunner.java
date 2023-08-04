@@ -23,9 +23,10 @@ public class KBAppRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("\nHello! Pick a number between 1 to 2, for the following options:");
+        System.out.println("\nHello! Pick a number between 1 to 3, for the following options:");
         System.out.println("1) Query test on Korean cluster");
         System.out.println("2) Create Korean cluster");
+        System.out.println("3) Exit");
         System.out.println(":: Non-options will result in an exception. ::");
         System.out.print(">>> ");
 
@@ -33,7 +34,7 @@ public class KBAppRunner implements CommandLineRunner {
         int option = sc.nextInt();
         sc.close();
 
-        if (option < 1 || option > 2) throw new IllegalArgumentException();
+        if (option < 1 || option > 3) throw new IllegalArgumentException();
 
         switch (option) {
             case 1:
@@ -42,6 +43,8 @@ public class KBAppRunner implements CommandLineRunner {
             case 2:
                 doInsert();
                 break;
+            case 3:
+                return;
         }
     }
 

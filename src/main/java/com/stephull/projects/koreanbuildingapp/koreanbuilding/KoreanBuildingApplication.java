@@ -8,12 +8,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 @SpringBootApplication
-@ComponentScan({"com.stephull.projects.koreanbuildingapp"})
+@ComponentScan(basePackages="com.stephull.projects.koreanbuildingapp")
 @EnableMongoRepositories("com.stephull.projects.koreanbuildingapp.repository")
 @EnableEncryptableProperties
 public class KoreanBuildingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(KoreanBuildingApplication.class, args);
+		// always check for localhost:8080
 	}
 }
