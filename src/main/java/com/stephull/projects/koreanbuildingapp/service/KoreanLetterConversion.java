@@ -1,5 +1,7 @@
 package com.stephull.projects.koreanbuildingapp.service;
 
+import com.stephull.projects.koreanbuildingapp.data.KoreanBuildData;
+import com.stephull.projects.koreanbuildingapp.data.KoreanUnicodeProvider;
 import com.stephull.projects.koreanbuildingapp.model.KoreanSpeechCluster;
 import com.stephull.projects.koreanbuildingapp.model.SpeechType;
 
@@ -8,21 +10,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KoreanLetterConversion {
-    
-    private static final int INIT_CONST_RANGE_START = 0x1100;
-    private static final int INIT_CONST_RANGE_END = 0x1112;
-    private static final int VOWEL_RANGE_START = 0x1161;
-    private static final int VOWEL_RANGE_END = 0x1175;
-    private static final int FINAL_CONST_RANGE_START = 0x11A8;
-    private static final int FINAL_CONST_RANGE_END = 0x11C2;
-    private static final int CHARACTER_RANGE_START = 0xAC00;
-    private static final int CHARACTER_RANGE_END = 0xD7A3;
-    private static final int CONSONANT_INDEX = 28;
-    private static final int VOWEL_INDEX = 21;
+
+	@Autowired
+	private final KoreanUnicodeProvider kup;
+
+	@Autowired
+	private final KoreanBuildData kbdata;
+
+	public KoreanLetterConversion(
+		KoreanUnicodeProvider kup,
+		KoreanBuildData kbdata
+	) {
+		this.kup = kup;
+		this.kbdata = kbdata;
+	}
 
 	/**
 	 * Input of type String redirected to similar method that takes in char
@@ -43,6 +49,16 @@ public class KoreanLetterConversion {
 	 * @return List<KoreanSpeechCluster>
 	 */
 	public List<KoreanSpeechCluster> convertCharacterToClusterArray(char character) {
+		int[] initRange = new int[] { 
+			kup.getNormalJamoConsonantRangeStart(), kup.getNormalJamoConsonantRangeEnd() 
+		};
+		int[] vowelRange = new int[] { 
+			kup.getNormalJamoVowelRangeStart(), kup.getNormalJamoVowelRangeEnd() 
+		};
+		int[] finalRange = new int[] { 
+			kup.getNormalJamoEndConsonantRangeStart(), kup.getNormalJamoEndConsonantRangeEnd() 
+		};
+
 		List<KoreanSpeechCluster> clusters = new ArrayList<KoreanSpeechCluster>();
 
 		List<String> sounds = this.convertCharacterToLetterArray(character);
@@ -54,18 +70,17 @@ public class KoreanLetterConversion {
 			//String roman = kbrepo.findSoundRomanizationByLetter(s);
 
 			String st;
-			if (this.withinRange(soundCode, INIT_CONST_RANGE_START, INIT_CONST_RANGE_END)) {
+			if (this.withinRange(soundCode, initRange[0], initRange[1])) {
 				st = SpeechType.CONSONANT;
-			} else if (this.withinRange(soundCode, VOWEL_RANGE_START, VOWEL_RANGE_END)) {
+			} else if (this.withinRange(soundCode, vowelRange[0], vowelRange[1])) {
 				st = SpeechType.VOWEL;
-			} else if (this.withinRange(soundCode, FINAL_CONST_RANGE_START, FINAL_CONST_RANGE_END)) {
+			} else if (this.withinRange(soundCode, finalRange[0], finalRange[1])) {
 				st = SpeechType.END_CONSONANT;
 			} else {
 				st = null;
 			}
 
-			KoreanSpeechCluster k = new KoreanSpeechCluster(s, "test", st);
-			clusters.add(k);
+			// 
 		}
 
 		return clusters;
@@ -89,23 +104,30 @@ public class KoreanLetterConversion {
 	 * @return List<String> 
 	 */
     public List<String> convertCharacterToLetterArray(char character) {
+		int[] syllableRange = new int[] {
+			kup.getSyllableCharacterRangeStart(), kup.getSyllableCharacterRangeEnd()
+		};
+		int consonantIndex = kup.getConsonantCount();
+		int vowelIndex = kup.getVowelCount();
+
         List<String> jamoCharacters = new ArrayList<String>();
 
         int charCode = (int) character;
-        if (charCode < CHARACTER_RANGE_START || charCode > CHARACTER_RANGE_END) {
+        if (charCode < syllableRange[0] || charCode > syllableRange[1]) {
             System.out.println("Invalid input (need proper Korean character). Try again!");
 			return jamoCharacters; 
         }        
         
-        int syllableIndex = charCode - CHARACTER_RANGE_START;
-        int initialIndex = syllableIndex / (CONSONANT_INDEX * VOWEL_INDEX),
-            vowelIndex = (syllableIndex / CONSONANT_INDEX) % VOWEL_INDEX,
-            finalIndex = (syllableIndex % CONSONANT_INDEX) - 1;
+        int syllableIndex = charCode - syllableRange[0];
+        int initialPlacement = syllableIndex / (consonantIndex * vowelIndex),
+            vowelPlacement = (syllableIndex / consonantIndex) % vowelIndex,
+            finalPlacement = (syllableIndex % consonantIndex) - 1;
 
-        char initConsonant = (char) (INIT_CONST_RANGE_START + initialIndex),
-            vowel = (char) (VOWEL_RANGE_START + vowelIndex),
-            finalConsonant = (finalIndex >= 0) 
-                ? (char) (FINAL_CONST_RANGE_START + finalIndex) : '\0';
+        char initConsonant = (char) (kup.getNormalJamoConsonantRangeStart() + initialPlacement),
+            vowel = (char) (kup.getNormalJamoVowelRangeStart() + vowelPlacement),
+            finalConsonant = (finalPlacement >= 0) 
+                ? (char) (kup.getNormalJamoEndConsonantRangeStart() + finalPlacement) 
+				: '\0';
 
 		switch (initConsonant) {
 			case 0x1101:
@@ -250,12 +272,20 @@ public class KoreanLetterConversion {
 		        unicodeValues.add(uni+1);
 	        } else {
 	            int compound = comparableCompoundChecker(comparable, uni);
+
+				int[] vowelRange = new int[] {
+					kup.getNormalJamoVowelRangeStart(), kup.getNormalJamoVowelRangeEnd()
+				};
+				int[] finalRange = new int[] {
+					kup.getNormalJamoEndConsonantRangeStart(), kup.getNormalJamoEndConsonantRangeEnd()
+				};
+
 	            boolean areVowel = (
-	                withinRange(uni, VOWEL_RANGE_START, VOWEL_RANGE_END) && 
-	                withinRange(comparable, VOWEL_RANGE_START, VOWEL_RANGE_END)
+	                withinRange(uni, vowelRange[0], vowelRange[1]) && 
+	                withinRange(comparable, vowelRange[0], vowelRange[1])
 	            ), areFinal = (
-	                withinRange(uni, FINAL_CONST_RANGE_START, FINAL_CONST_RANGE_END) && 
-	                withinRange(comparable, FINAL_CONST_RANGE_START, FINAL_CONST_RANGE_END)
+	                withinRange(uni, finalRange[0], finalRange[1]) && 
+	                withinRange(comparable, finalRange[0], finalRange[1])
 	            );
 
 	            if (compound != -1 && (areFinal || areVowel)) {
@@ -267,13 +297,17 @@ public class KoreanLetterConversion {
 	        }
 		}
 		
-		int a = unicodeValues.get(0) - INIT_CONST_RANGE_START; 
-		int b = unicodeValues.get(1) - VOWEL_RANGE_START;
+		int a = unicodeValues.get(0) - kup.getNormalJamoConsonantRangeStart(); 
+		int b = unicodeValues.get(1) - kup.getNormalJamoVowelRangeStart();
 		int c = (unicodeValues.size() > 2) 
-		    ? (unicodeValues.get(2) + 1) - FINAL_CONST_RANGE_START : 0;
+		    ? (unicodeValues.get(2) + 1) - kup.getNormalJamoEndConsonantRangeStart() 
+			: 0;
 		
-		int result = (a * CONSONANT_INDEX * VOWEL_INDEX) + (b * CONSONANT_INDEX) + c;
-		char temp = (char) (result+CHARACTER_RANGE_START);
+		int consonantIndex = kup.getConsonantCount();
+		int vowelIndex = kup.getVowelCount();
+
+		int result = (a * consonantIndex * vowelIndex) + (b * consonantIndex) + c;
+		char temp = (char) (result + kup.getSyllableCharacterRangeStart());
 		
 		return Character.toString(temp);
 	}
@@ -296,19 +330,7 @@ public class KoreanLetterConversion {
 	 * @return int
 	 */
 	private int comparableCompoundChecker(int i1, int i2) {
-		int[][] lookupTable = {
-			{0x1169, 0x1161, 0x116A}, {0x1169, 0x1162, 0x116B},
-			{0x1169, 0x1175, 0x116C}, {0x116E, 0x1165, 0x116F},
-			{0x116E, 0x1166, 0x1170}, {0x116E, 0x1175, 0x1171},
-			{0x1173, 0x1175, 0x1174}, {0x11A8, 0x11BA, 0x11AA},
-			{0x11AB, 0x11BD, 0x11AC}, {0x11AB, 0x11C2, 0x11AD},
-			{0x11AF, 0x11A8, 0x11B0}, {0x11AF, 0x11B7, 0x11B1},
-			{0x11AF, 0x11B8, 0x11B2}, {0x11AF, 0x11BA, 0x11B3},
-			{0x11AF, 0x11C0, 0x11B4}, {0x11AF, 0x11C1, 0x11B5},
-			{0x11AF, 0x11C2, 0x11B6}, {0x11B8, 0x11BA, 0x11B9}
-		};
-
-		for (int[] row : lookupTable) {
+		for (int[] row : kbdata.getCompoundComparisonTable()) {
 			if (i1 == row[0] && i2 == row[1]) return row[2];
 		}
 
@@ -324,46 +346,28 @@ public class KoreanLetterConversion {
 	 * @return int
 	 */
 	private int convertToProperUnicode(int n, int i) {
+		int[] initRange = new int[] { 
+			kup.getNormalJamoConsonantRangeStart(), kup.getNormalJamoConsonantRangeEnd() 
+		};
+		int[] vowelRange = new int[] { 
+			kup.getNormalJamoVowelRangeStart(), kup.getNormalJamoVowelRangeEnd() 
+		};
+		int[] finalRange = new int[] { 
+			kup.getNormalJamoEndConsonantRangeStart(), kup.getNormalJamoEndConsonantRangeEnd() 
+		};
+
 	    if (
-	        withinRange(n, FINAL_CONST_RANGE_START, FINAL_CONST_RANGE_END) || 
-	        withinRange(n, VOWEL_RANGE_START, VOWEL_RANGE_END) || 
-	        withinRange(n, INIT_CONST_RANGE_START, INIT_CONST_RANGE_END)
+	        withinRange(n, initRange[0], initRange[1]) || 
+	        withinRange(n, vowelRange[0], vowelRange[1]) || 
+	        withinRange(n, finalRange[0], finalRange[1])
 	    ) return n;
 	    
-	    boolean canBeFinal = (i>1), 
-	        isVowel = (n >= 0x314F && n <= 0x3163);
-	        
-	    int[][] conversionTable = {
-	        {0x3131, 0x1100, 0x11A8},   {0x3132, 0x1101, 0x11A9},
-	        {0x3133, -1, 0x11AA},       {0x3134, 0x1102, 0x11AB},
-	        {0x3135, -1, 0x11AC},       {0x3136, -1, 0x11AD},
-	        {0x3137, 0x1103, 0x11AE},   {0x3138, 0x1104, -1},
-	        {0x3139, 0x1105, 0x11AF},   {0x313A, -1, 0x11B0},
-	        {0x313B, -1, 0x11B1},       {0x313C, -1, 0x11B2},
-	        {0x313D, -1, 0x11B3},       {0x313E, -1, 0x11B4},
-	        {0x313F, -1, 0x11B5},       {0x3140, -1, 0x11B6},
-	        {0x3141, 0x1106, 0x11B7},   {0x3142, 0x1107, 0x11B8},
-	        {0x3143, 0x1108, -1},       {0x3144, -1, 0x11B9 },
-	        {0x3145, 0x1109, 0x11BA},   {0x3146, 0x110A, 0x11BB},
-	        {0x3147, 0x110B, 0x11BC},   {0x3148, 0x110C, 0x11BD},
-	        {0x3149, 0x110D, -1},       {0x314A, 0x110E, 0x11BE},
-	        {0x314B, 0x110F, 0x11BF},   {0x314C, 0x1110, 0x11C0},
-	        {0x314D, 0x1111, 0x11C1},   {0x314E, 0x1112, 0x11C2},
-	        {0x314F, 0x1161, -1},       {0x3150, 0x1162, -1},
-	        {0x3151, 0x1163, -1},       {0x3152, 0x1164, -1},
-	        {0x3153, 0x1165, -1},       {0x3154, 0x1166, -1},
-	        {0x3155, 0x1167, -1},       {0x3156, 0x1168, -1},
-	        {0x3157, 0x1169, -1},       {0x3158, 0x116A, -1},
-	        {0x3159, 0x116B, -1},       {0x315A, 0x116C, -1},
-	        {0x315B, 0x116D, -1},       {0x315C, 0x116E, -1},
-	        {0x315D, 0x116F, -1},       {0x315E, 0x1170, -1},
-	        {0x315F, 0x1171, -1},       {0x3160, 0x1172, -1},
-	        {0x3161, 0x1173, -1},       {0x3162, 0x1174, -1},
-	        {0x3163, 0x1175, -1}
-	    };
-	    
-	    for (int[] row : conversionTable) {
-	        if (n == row[0]) return (isVowel || (!isVowel && !canBeFinal)) ? row[1] : row[2];
+	    boolean canBeFinal = (i>1), isVowel = (n >= 0x314F && n <= 0x3163);
+
+	    for (int[] row : kbdata.getUnicodeConversionTable()) {
+	        if (n == row[0]) {
+				return (isVowel || (!isVowel && !canBeFinal)) ? row[1] : row[2];
+			};
 	    }
 	    
 	    return -1;
@@ -572,7 +576,9 @@ public class KoreanLetterConversion {
 
 class KoreanLetterConversionDemo {
 
-	protected static KoreanLetterConversion klc = new KoreanLetterConversion();
+	protected static KoreanLetterConversion klc = new KoreanLetterConversion(
+		new KoreanUnicodeProvider(), new KoreanBuildData()
+	);
 
 	public static void demo(String a) {
 		List<String> j = klc.convertCharacterToLetterArray(a.charAt(0));
