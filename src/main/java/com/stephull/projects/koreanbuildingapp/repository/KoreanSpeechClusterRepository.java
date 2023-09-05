@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import com.stephull.projects.koreanbuildingapp.model.KoreanSpeechCluster;
 
 @Component
-public interface SpeechRepository extends MongoRepository<KoreanSpeechCluster, String> {
+public interface KoreanSpeechClusterRepository extends MongoRepository<KoreanSpeechCluster, String>{
     
-    //
-
+    boolean existsByKscid(String kscid);
+    
 }

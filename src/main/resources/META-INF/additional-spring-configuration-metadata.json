@@ -4,6 +4,81 @@
       "name": "htmlapi.baseendpoint",
       "type": "java.lang.String",
       "description": "A description for 'htmlapi.baseendpoint'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-range-start",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-range-start'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-range-end",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-range-end'"
+    },
+    {
+      "name": "korean.unicode.compatible-jamo-range-start",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.compatible-jamo-range-start'"
+    },
+    {
+      "name": "korean.unicode.compatible-jamo-range-end",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.compatible-jamo-range-end'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-consonant-range-start",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-consonant-range-start'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-consonant-range-end",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-consonant-range-end'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-vowel-range-start",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-vowel-range-start'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-vowel-range-end",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-vowel-range-end'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-end-consonant-range-start",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-end-consonant-range-start'"
+    },
+    {
+      "name": "korean.unicode.normal-jamo-end-consonant-range-end",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.normal-jamo-end-consonant-range-end'"
+    },
+    {
+      "name": "korean.unicode.consonant-count",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.consonant-count'"
+    },
+    {
+      "name": "korean.unicode.vowel-count",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.vowel-count'"
+    },
+    {
+      "name": "korean.unicode.end-consonant-count",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.end-consonant-count'"
+    },
+    {
+      "name": "korean.unicode.syllable-character-range-start",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.syllable-character-range-start'"
+    },
+    {
+      "name": "korean.unicode.syllable-character-range-end",
+      "type": "java.lang.String",
+      "description": "A description for 'korean.unicode.syllable-character-range-end'"
     }
   ]
 }
