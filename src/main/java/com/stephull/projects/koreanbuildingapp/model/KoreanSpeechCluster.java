@@ -1,42 +1,59 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="KoreanSpeechCluster")
-public class KoreanSpeechCluster {
+public class KoreanSpeechCluster implements RelationshipManager<KoreanSpeechCluster>{
 
-    @Id
+    @Id 
+    @Field("_id")
     private String id;
 
-    //private CustomID<KoreanSpeechCluster> kscid;
+    @Field("kscid")
+    private CustomID<KoreanSpeechCluster> kscid;
+    
     private String letter;
-    private String romanization;
+    private String positioned;
+    private String romanized;
     private String type;
+    
+    private Map<KoreanSpeechCluster, KoreanSpeechCluster> compounds;
 
-    public KoreanSpeechCluster() {}
+    public KoreanSpeechCluster() {
+        this.kscid = new CustomID<>("0", KoreanSpeechCluster.class.getName());
+    }
 
     public KoreanSpeechCluster(
         String letter,
-        String romanization,
+        String positioned,
+        String romanized,
         String type
     ) {
         this.letter = letter;
-        this.romanization = romanization;
+        this.positioned = positioned;
+        this.romanized = romanized;
         this.type = type;
+
+        this.compounds = new LinkedHashMap<KoreanSpeechCluster, KoreanSpeechCluster>();
+        this.kscid = new CustomID<>("0", KoreanSpeechCluster.class.getName());
     }
 
     public String getId() {
         return this.id;
     }
 
-    /*public String getKscId() {
-        return this.kscid.getCustomID();
+    public CustomID<KoreanSpeechCluster> getKscId() {
+        return this.kscid;
     }
 
-    public void setKscId(String newKscId) {
-        this.kscid.setCustomID(newKscId);
-    }*/
+    public void setKscId(CustomID<KoreanSpeechCluster> newKscId) {
+        this.kscid = newKscId;
+    }
 
     public String getLetter() {
         return this.letter;
@@ -46,12 +63,20 @@ public class KoreanSpeechCluster {
         this.letter = newLetter;
     }
 
-    public String getRomanization() {
-        return this.romanization;
+    public String getPositioned() {
+        return this.positioned;
     }
 
-    public void setRomanization(String newRomanization) {
-        this.romanization = newRomanization;
+    public void setPositioned(String newPositioned) {
+        this.positioned = newPositioned;
+    }
+
+    public String getRomanized() {
+        return this.romanized;
+    }
+
+    public void setRomanized(String newRomanized) {
+        this.romanized = newRomanized;
     }
 
     public String getType() {
@@ -63,16 +88,28 @@ public class KoreanSpeechCluster {
     }
 
     @Override
+    public void addRelationship(KoreanSpeechCluster k, KoreanSpeechCluster v) {
+        compounds.put(k, v);
+    }
+
+    @Override
+    public Map<KoreanSpeechCluster, KoreanSpeechCluster> getRelationships() {
+        return compounds;
+    }
+
+    @Override
     public String toString() {
         String ret = String.format(
             """
             [
                 Letter=%s
+                Positioned Unicode equivalent=%s
                 Romanized sound=%s
                 Speech type=%s
+                Compound pairs=%s
             ]
             """,
-            letter, romanization, type
+            letter, positioned, romanized, type, compounds
         );
         return ret.indent(2);
     }
