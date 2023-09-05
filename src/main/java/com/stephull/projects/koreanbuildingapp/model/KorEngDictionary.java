@@ -5,13 +5,18 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="KorEngDictionary")
 public class KorEngDictionary {
     
-    @Id private String id;
+    @Id 
+    @Field("_id")
+    private String id;
 
+    @Field("kedid")
     private CustomID<KorEngDictionary> kedid;
+    
     private String entry;
     private List<List<KoreanBuild>> relatedBuilds;
     private List<DictionaryDefinition> definitions;

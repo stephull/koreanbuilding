@@ -4,14 +4,18 @@ import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="KoreanPronunciation")
 public class KoreanPronunciation {
 
-    @Id
+    @Id 
+    @Field("_id")
     private String id;
 
+    @Field("kpid")
     private CustomID<KoreanPronunciation> kpid;
+    
     private PronunciationType type;
     private Optional<KPProperty> previous;
     private Optional<KPProperty> replaceBase;

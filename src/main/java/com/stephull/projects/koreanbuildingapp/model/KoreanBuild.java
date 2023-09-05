@@ -2,77 +2,76 @@ package com.stephull.projects.koreanbuildingapp.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
-import java.util.Optional;
 
 @Document(collection = "KoreanBuilds")
 public class KoreanBuild {
 
     @Id
+    @Field("_id") 
     private String id;
 
+    @Field("kbid")
     private CustomID<KoreanBuild> kbid;
+    
     private String build;
     private String unicode;
 
+    private int phase;
+
     private KoreanBuildSound sound;
     private KoreanBuildStats stats;
+
+    private KoreanBuild root;
+    private KoreanBuild parent;
+
     private List<KoreanSpeechCluster> assembly;
     private KoreanSpeechCluster base;
 
-    private Optional<List<KoreanBuild>> consonants;
-    private Optional<List<KoreanBuild>> vowels;
+    private List<KoreanBuild> children;
 
-    public KoreanBuild() {}
-
-    // normal constructor
-    public KoreanBuild(
-        String build,
-        String unicode,
-        KoreanBuildSound sound,
-        KoreanBuildStats stats,
-        List<KoreanSpeechCluster> assembly,
-        KoreanSpeechCluster base
-    ) {
-        this.build = build;
-        this.unicode = unicode;
-        this.sound = sound;
-        this.stats = stats;
-        this.assembly = assembly;
-        this.base = base;
+    public KoreanBuild() {
+        this.kbid = new CustomID<KoreanBuild>("0", KoreanBuild.class.getName());
     }
 
     public KoreanBuild(
         String build,
         String unicode,
+        int phase,
         KoreanBuildSound sound,
         KoreanBuildStats stats,
+        KoreanBuild root,
+        KoreanBuild parent,
         List<KoreanSpeechCluster> assembly,
         KoreanSpeechCluster base,
-        List<KoreanBuild> consonants,
-        List<KoreanBuild> vowels
+        List<KoreanBuild> children
     ) {
         this.build = build;
         this.unicode = unicode;
+        this.phase = phase;
         this.sound = sound;
         this.stats = stats;
+        this.root = root;
+        this.parent = parent;
         this.assembly = assembly;
         this.base = base;
-        this.consonants = Optional.ofNullable(consonants);
-        this.vowels = Optional.ofNullable(vowels);
+        this.children = children;
+
+        this.kbid = new CustomID<KoreanBuild>("0", KoreanBuild.class.getName());
     }
 
     public String getId() {
         return this.id;
     }
 
-    public String getKbid() {
-        return this.kbid.getCustomID();
+    public CustomID<KoreanBuild> getKbid() {
+        return this.kbid;
     }
 
-    public void setKbId(String newKbId) {
-        this.kbid.setCustomID(newKbId);
+    public void setKbId(CustomID<KoreanBuild> newKbId) {
+        this.kbid = newKbId;
     }
 
     public KoreanSpeechCluster getBase() {
@@ -99,6 +98,14 @@ public class KoreanBuild {
         this.unicode = newUnicode;
     }
 
+    public int getPhase() {
+        return this.phase;
+    }
+
+    public void setPhase(int newPhase) {
+        this.phase = newPhase;
+    }
+
     public KoreanBuildSound getSound() {
         return this.sound;
     }
@@ -115,6 +122,22 @@ public class KoreanBuild {
         this.stats = newStats;
     }
 
+    public KoreanBuild getRoot() {
+        return this.root;
+    }
+
+    public void setRoot(KoreanBuild newRoot) {
+        this.root = newRoot;
+    }
+
+    public KoreanBuild getParent() {
+        return this.parent;
+    }
+
+    public void setParent(KoreanBuild newParent) {
+        this.parent = newParent;
+    }
+
     public List<KoreanSpeechCluster> getAssembly() {
         return this.assembly;
     }
@@ -123,20 +146,12 @@ public class KoreanBuild {
         this.assembly = newAssembly;
     }
 
-    public List<KoreanBuild> getConsonants() {
-        return this.consonants.orElse(null);
+    public List<KoreanBuild> getChildren() {
+        return this.children;
     }
 
-    public void setConsonants(Optional<List<KoreanBuild>> newConsonants) {
-        this.consonants = newConsonants;
-    }
-
-    public List<KoreanBuild> getVowels() {
-        return this.vowels.orElse(null);
-    }
-
-    public void setVowels(Optional<List<KoreanBuild>> newVowels) {
-        this.vowels = newVowels;
+    public void setConsonants(List<KoreanBuild> newChildren) {
+        this.children = newChildren;
     }
 
     @Override
@@ -148,19 +163,27 @@ public class KoreanBuild {
                 Korean Build ID=%s
                 Build=%s
                 Unicode=%s
+                Experience phase=%d
+                Sound=%s
+                Stats=%s
+                Root=%s
+                Parent=%s
                 Assembly=%s
                 Base=%s
+                Children=%s
             ]
             """,
             id, kbid,
             build,
             unicode,
+            phase,
             sound,
             stats,
+            root,
+            parent,
             assembly,
             base,
-            consonants,
-            vowels
+            children
         );
         return ret.indent(2);
     }
@@ -170,13 +193,13 @@ public class KoreanBuild {
         private String key;
         private boolean silent;
         private boolean replace;
-        private Optional<KoreanPronunciation> pronunciation;
+        private KoreanPronunciation pronunciation;
 
         public KoreanBuildSound(
             String key,
             boolean silent,
             boolean replace,
-            Optional<KoreanPronunciation> pronunciation
+            KoreanPronunciation pronunciation
         ) {
             this.key = key;
             this.silent = silent;
@@ -209,10 +232,10 @@ public class KoreanBuild {
         }
 
         public KoreanPronunciation getPronunciation() {
-            return this.pronunciation.orElse(null);
+            return this.pronunciation;
         }
 
-        public void setPronunciation(Optional<KoreanPronunciation> newPronunciation) {
+        public void setPronunciation(KoreanPronunciation newPronunciation) {
             this.pronunciation = newPronunciation;
         }
 

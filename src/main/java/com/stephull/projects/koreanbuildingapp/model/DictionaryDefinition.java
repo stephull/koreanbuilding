@@ -5,13 +5,18 @@ import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="DictionaryDefinitions")
 public class DictionaryDefinition {
 
-    @Id private String id;
+    @Id 
+    @Field("_id")
+    private String id;
 
+    @Field("ddid")
     private CustomID<DictionaryDefinition> ddid;
+    
     private String translation;
     private WordType entryType;    // noun, verb, adverb, etc.
     private String meaning;

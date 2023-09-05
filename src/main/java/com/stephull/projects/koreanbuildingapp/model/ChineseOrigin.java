@@ -5,14 +5,18 @@ import java.util.Optional;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection="ChineseOrigin")
 public class ChineseOrigin {
     
-    @Id
+    @Id 
+    @Field("_id")
     private String id;
 
+    @Field("coid")
     private CustomID<ChineseOrigin> coid;
+
     private String character;
     private String unicode;
     private ArrayList<String> definitions;
