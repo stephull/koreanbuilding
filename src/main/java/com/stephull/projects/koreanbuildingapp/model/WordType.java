@@ -1,15 +1,15 @@
 package com.stephull.projects.koreanbuildingapp.model;
 
-public enum WordType {
+public class WordType {
     
-    NOUN,
-    PRONOUN,
-    ADVERB,
-    ADJECTIVE,
-    VERB,
-    PREPOSITION,
-    CONJUNCTION,
-    INTERJECTION,
-    PROPER_NOUN
+    public static final String NOUN = "Noun";
+    public static final String PRONOUN = "Pronoun";
+    public static final String ADVERB = "Adverb";
+    public static final String ADJECTIVE = "Adjective";
+    public static final String VERB = "Verb";
+    public static final String PREPOSITION = "Preposition";
+    public static final String CONJUNCTION = "Conjunction";
+    public static final String INTERJECTION = "Interjection";
+    public static final String PROPER_NOUN = "Proper noun";
 
 }

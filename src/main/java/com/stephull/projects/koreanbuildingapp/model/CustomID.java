@@ -3,10 +3,10 @@ package com.stephull.projects.koreanbuildingapp.model;
 public class CustomID<T> {
     
     private String id;
-    private Class<T> association;
+    private String association;
 
     public CustomID(
-        String id, Class<T> association
+        String id, String association
     ) {
         this.id = id;
         this.association = association;
@@ -20,11 +20,11 @@ public class CustomID<T> {
         this.id = newID;
     }
 
-    public Class<T> getAssocation() {
+    public String getAssocation() {
         return this.association;
     }
 
-    public void setAssocation(Class<T> newAssociation) {
+    public void setAssocation(String newAssociation) {
         this.association = newAssociation;
     }
 }
