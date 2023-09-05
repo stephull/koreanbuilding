@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,14 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
-import com.stephull.projects.koreanbuildingapp.repository.KBRepository;
+import com.stephull.projects.koreanbuildingapp.repository.KoreanBuildRepository;
 
 @CrossOrigin(origins="http://127.0.0.1:3000")
 @RestController
 @RequestMapping("/api/builds")
 public class KBController {
     
-    protected KBRepository kbrepo;
+    protected final KoreanBuildRepository kbrepo;
+
+    public KBController(KoreanBuildRepository kbrepo) {
+        this.kbrepo = kbrepo;
+    }
 
     /**
      * Get all available builds, optional containing for all builds with given letter/character

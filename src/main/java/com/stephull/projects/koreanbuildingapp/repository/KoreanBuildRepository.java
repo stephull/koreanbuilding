@@ -9,7 +9,7 @@ import com.stephull.projects.koreanbuildingapp.model.KoreanBuild;
 import com.stephull.projects.koreanbuildingapp.model.KoreanPronunciation;
 
 @Component
-public interface KBRepository extends MongoRepository<KoreanBuild, String> {
+public interface KoreanBuildRepository extends MongoRepository<KoreanBuild, String> {
     
     // return unicode value based on given Korean character
     String findUnicodeByBuild(String build);
